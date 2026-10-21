@@ -1,121 +1,109 @@
 import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+
+import Header from './components/layout/Header'
+import Footer from './components/layout/Footer'
+import CartPage from './features/cart/CartPage'
+
+import { CatalogPage } from './features/catalog/pages/CatalogPage'
+import { ProductPage } from './features/catalog/pages/ProductPage'
+import { products } from './features/catalog/data/products'
+
+import type { Product } from './types/product'
+
+type Page = 'catalog' | 'product' | 'cart'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [page, setPage] = useState<Page>('catalog')
+  const [selectedProduct, setSelectedProduct] =
+    useState<Product | null>(null)
+
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+  function openCatalog() {
+    setPage('catalog')
+    setSelectedProduct(null)
+    setIsMenuOpen(false)
+    window.scrollTo(0, 0)
+  }
+
+  function openProduct(productId: string) {
+    const product = products.find(
+      (item) => item.id === productId
+    )
+
+    if (!product) return
+
+    setSelectedProduct(product)
+    setPage('product')
+    setIsMenuOpen(false)
+    window.scrollTo(0, 0)
+  }
+
+  function openCart() {
+    setPage('cart')
+    setIsMenuOpen(false)
+    window.scrollTo(0, 0)
+  }
+
+  const isDark = page !== 'catalog'
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
+    <div
+      className={`min-h-screen ${
+        isDark
+          ? 'bg-black text-white'
+          : 'bg-white text-black'
+      }`}
+    >
+      <Header
+        theme={isDark ? 'dark' : 'light'}
+        onMenuClick={() => setIsMenuOpen((open) => !open)}
+        onCartClick={openCart}
+      />
+
+      {isMenuOpen && (
+        <nav
+          aria-label="Main navigation"
+          className={`border-b px-6 py-6 ${
+            isDark
+              ? 'border-neutral-800 bg-black'
+              : 'border-neutral-200 bg-white'
+          }`}
         >
-          Count is {count}
-        </button>
-      </section>
+          <button
+            type="button"
+            onClick={openCatalog}
+            className="block cursor-pointer font-['Barlow_Condensed'] text-xl font-bold uppercase hover:opacity-60"
+          >
+            ALL PRODUCTS
+          </button>
 
-      <div className="ticks"></div>
+          <button
+            type="button"
+            onClick={openCart}
+            className="mt-4 block cursor-pointer font-['Barlow_Condensed'] text-xl font-bold uppercase hover:opacity-60"
+          >
+            YOUR BAG
+          </button>
+        </nav>
+      )}
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+      {page === 'catalog' && (
+        <CatalogPage onProductClick={openProduct} />
+      )}
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+      {page === 'product' && selectedProduct && (
+        <ProductPage
+          key={selectedProduct.id}
+          product={selectedProduct}
+          onBack={openCatalog}
+        />
+      )}
+
+      {page === 'cart' && <CartPage />}
+
+      <Footer theme={isDark ? 'dark' : 'light'} />
+    </div>
   )
 }
 
