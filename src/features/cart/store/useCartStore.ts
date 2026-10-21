@@ -49,27 +49,28 @@ export const useCartStore = create<CartStore>((set) => ({
     })
   },
   removeItem: (productId, size) => {
-  set((state) => ({
-    items: state.items.filter(
-      (item) =>
-        !(
-          item.product.id === productId &&
-          item.size === size
-        )
-    ),
-  }))
-},
-updateQuantity: (productId, quantity, size) => {
-  if (!Number.isInteger(quantity) || quantity <= 0) return
+    set((state) => ({
+      items: state.items.filter(
+        (item) =>
+          !(
+            item.product.id === productId &&
+            item.size === size
+          )
+      ),
+    }))
+  },
 
-  set((state) => ({
-    items: state.items.map((item) =>
-      item.product.id === productId && item.size === size
-        ? { ...item, quantity }
-        : item
-    ),
-  }))
-},
+  updateQuantity: (productId, quantity, size) => {
+    if (!Number.isInteger(quantity) || quantity <= 0) return
+
+    set((state) => ({
+      items: state.items.map((item) =>
+        item.product.id === productId && item.size === size
+          ? { ...item, quantity }
+          : item
+      ),
+    }))
+  },
   clearCart: () => {
     set({ items: [] })
   },
