@@ -5,9 +5,14 @@ import type { Product } from '../../../types/product'
 interface ProductPageProps {
   product: Product
   onBack?: () => void
+  onAddToBag: (product: Product, size?: string) => void
 }
 
-export function ProductPage({ product, onBack }: ProductPageProps) {
+export function ProductPage({
+  product,
+  onBack,
+  onAddToBag,
+}: ProductPageProps) {
   const [selectedSize, setSelectedSize] = useState<string | null>(null)
   const [openSection, setOpenSection] = useState<string | null>(null)
 
@@ -117,6 +122,7 @@ export function ProductPage({ product, onBack }: ProductPageProps) {
             <button
               type="button"
               disabled={product.price === null || (requiresSize && !selectedSize)}
+              onClick={() => onAddToBag(product, selectedSize ?? undefined)}
               className="mt-3 w-full bg-[#e8eaed] px-5 py-4 text-[17px] font-bold uppercase text-black transition-colors hover:bg-white disabled:cursor-not-allowed disabled:opacity-50"
             >
               ADD TO BAG

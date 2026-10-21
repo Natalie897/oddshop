@@ -2,10 +2,12 @@ import { useState } from 'react'
 import { ProductCard } from '../components/ProductCard'
 import { products } from '../data/products'
 
-type Category = 'all' | 'caps' | 't-shirts' | 'bags'
+export type Category = 'all' | 'caps' | 't-shirts' | 'bags'
 
 interface CatalogPageProps {
   onProductClick?: (productId: string) => void
+  selectedCategory?: Category
+  onCategoryChange?: (category: Category) => void
 }
 
 const categories: { label: string; value: Category }[] = [
@@ -15,8 +17,22 @@ const categories: { label: string; value: Category }[] = [
   { label: 'BAGS', value: 'bags' },
 ]
 
-export function CatalogPage({ onProductClick }: CatalogPageProps) {
-  const [activeCategory, setActiveCategory] = useState<Category>('all')
+export function CatalogPage({
+  onProductClick,
+  selectedCategory,
+  onCategoryChange,
+}: CatalogPageProps) {
+  const [localCategory, setLocalCategory] = useState<Category>('all')
+
+  const activeCategory = selectedCategory ?? localCategory
+
+  function changeCategory(category: Category) {
+    if (onCategoryChange) {
+      onCategoryChange(category)
+    } else {
+      setLocalCategory(category)
+    }
+  }
 
   const filteredProducts = products.filter(
     (product) =>
@@ -36,7 +52,7 @@ export function CatalogPage({ onProductClick }: CatalogPageProps) {
               <button
                 key={category.value}
                 type="button"
-                onClick={() => setActiveCategory(category.value)}
+                onClick={() => changeCategory(category.value)}
                 aria-pressed={activeCategory === category.value}
                 className={`cursor-pointer border-b pb-1 font-['Barlow_Condensed'] text-[14px] font-bold uppercase transition-colors ${
                   activeCategory === category.value
