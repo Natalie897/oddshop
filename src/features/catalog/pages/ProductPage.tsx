@@ -1,4 +1,5 @@
-﻿import { useState } from 'react'
+﻿
+import { useState } from 'react'
 import type { Product } from '../../../types/product'
 
 interface ProductPageProps {
@@ -25,33 +26,24 @@ export function ProductPage({ product, onBack }: ProductPageProps) {
   }
 
   return (
-    <main className="min-h-screen bg-black text-white">
-      <div className="mx-auto max-w-[1440px] px-5 pb-16 pt-6 md:px-9 lg:pt-8">
-
-        {/* Возврат в каталог */}
+    <main className="min-h-[calc(100vh-112px)] bg-black text-white">
+      <div className="mx-auto max-w-[1440px] px-5 pb-12 pt-5 md:px-9 lg:pb-14 lg:pt-7">
         <button
           type="button"
           onClick={onBack}
-          className="cursor-pointer font-['Barlow_Condensed'] text-xs uppercase text-neutral-400 hover:text-white"
+          className="cursor-pointer font-['Barlow_Condensed'] text-xs uppercase text-neutral-400 transition-colors hover:text-white"
         >
           ← BACK TO SHOP
         </button>
 
-        {/* Пространство под шапку сайта из Figma */}
-        <div
-          aria-hidden="true"
-          className="h-10 md:h-16 lg:h-[150px]"
-        />
-
-        <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-[1fr_1.65fr_1fr] lg:gap-6">
-
-          {/* Левая колонка — описание */}
-          <section className="font-['Barlow_Condensed'] lg:pt-8">
+        <div className="mt-8 grid grid-cols-1 items-center gap-8 lg:mt-10 lg:grid-cols-[1fr_1.65fr_1fr] lg:gap-6">
+          {/* Описание товара */}
+          <section className="font-['Barlow_Condensed'] lg:self-center">
             <h1 className="text-[22px] font-bold uppercase leading-tight">
               {product.name}
             </h1>
 
-            <div className="mt-10 lg:mt-14">
+            <div className="mt-8 lg:mt-11">
               <p className="text-[16px] font-bold uppercase leading-tight">
                 A PIECE FOR MOVEMENT.
                 <br />
@@ -60,13 +52,13 @@ export function ProductPage({ product, onBack }: ProductPageProps) {
                 FOR EVERYWHERE BETWEEN.
               </p>
 
-              <p className="mt-8 max-w-[230px] text-[13px] leading-snug text-neutral-300 lg:mt-10">
+              <p className="mt-7 max-w-[250px] text-[13px] leading-snug text-neutral-300 lg:mt-9">
                 {product.description ??
                   'Designed for the ODD community. Product details and measurements will be added after the final shoot.'}
               </p>
             </div>
 
-            <div className="mt-10 lg:mt-16">
+            <div className="mt-10 lg:mt-12">
               <h2 className="mb-3 text-[14px] font-bold uppercase">
                 DETAILS / CARE
               </h2>
@@ -95,13 +87,13 @@ export function ProductPage({ product, onBack }: ProductPageProps) {
             </div>
           </section>
 
-          {/* Центральная колонка — фотография */}
-          <section className="relative flex min-h-[300px] items-center justify-center overflow-hidden pt-8 sm:min-h-[400px] lg:min-h-[490px] lg:pt-6">
+          {/* Изображение товара */}
+          <section className="relative flex min-h-[290px] items-center justify-center overflow-hidden sm:min-h-[360px] lg:min-h-[430px]">
             <img
               key={product.id}
               src={detailImage}
               alt={product.name}
-              className="relative h-auto w-[88%] max-w-[490px] object-contain"
+              className="relative h-auto w-[90%] max-w-[470px] object-contain"
               style={{
                 filter: [
                   'drop-shadow(1px 0 0 rgba(160,160,160,0.65))',
@@ -114,8 +106,8 @@ export function ProductPage({ product, onBack }: ProductPageProps) {
             />
           </section>
 
-          {/* Правая колонка — покупка */}
-          <section className="font-['Barlow_Condensed'] lg:pt-8">
+          {/* Цена, размер и покупка */}
+          <section className="font-['Barlow_Condensed'] lg:self-center">
             <p className="text-right text-[14px] font-bold uppercase">
               {product.price === null
                 ? 'PRICE TBC'
@@ -124,7 +116,7 @@ export function ProductPage({ product, onBack }: ProductPageProps) {
 
             <button
               type="button"
-              disabled={requiresSize && !selectedSize}
+              disabled={product.price === null || (requiresSize && !selectedSize)}
               className="mt-3 w-full bg-[#e8eaed] px-5 py-4 text-[17px] font-bold uppercase text-black transition-colors hover:bg-white disabled:cursor-not-allowed disabled:opacity-50"
             >
               ADD TO BAG
@@ -156,11 +148,13 @@ export function ProductPage({ product, onBack }: ProductPageProps) {
               </div>
             )}
 
-            <p className="mt-9 text-center text-[12px] font-bold uppercase tracking-wide text-neutral-500">
-              NEXT STEP / ORDER IN TELEGRAM BOT
+            <p className="mt-8 text-center text-[12px] font-bold uppercase tracking-wide text-neutral-500">
+              {product.price === null
+                ? 'PRICE WILL BE CONFIRMED BEFORE LAUNCH'
+                : 'NEXT STEP / ORDER IN TELEGRAM BOT'}
             </p>
 
-            <div className="mt-9 border-t border-neutral-500">
+            <div className="mt-8 border-t border-neutral-500">
               <button
                 type="button"
                 onClick={() => toggleSection('shipping')}
