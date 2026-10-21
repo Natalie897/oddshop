@@ -1,11 +1,34 @@
 import { test, beforeEach } from 'node:test'
 import assert from 'node:assert/strict'
 
-import {
+// Имитация localStorage для тестов Node.js
+const storage = new Map()
+
+Object.defineProperty(globalThis, 'localStorage', {
+  configurable: true,
+  value: {
+    getItem: (key) => storage.get(key) ?? null,
+
+    setItem: (key, value) => {
+      storage.set(key, String(value))
+    },
+
+    removeItem: (key) => {
+      storage.delete(key)
+    },
+
+    clear: () => {
+      storage.clear()
+    },
+  },
+})
+
+// Загружаем Zustand только после создания localStorage
+const {
   useCartStore,
   selectCartTotal,
   selectCanCheckout,
-} from './useCartStore.ts'
+} = await import('./useCartStore.ts')
 
 const tshirt = {
   id: 'tshirt-01',
@@ -107,4 +130,16 @@ test('Оформление запрещено при устаревшей цен
   })
 
   assert.equal(selectCanCheckout(useCartStore.getState()), false)
+})
+
+test('Persist сохраняет товары в localStorage', () => {
+  useCartStore.getState().addItem(tshirt, 'M', 2)
+
+  const saved = JSON.parse(
+    globalThis.localStorage.getItem('odd-cart-v1')
+  )
+
+  assert.equal(saved.state.items.length, 1)
+  assert.equal(saved.state.items[0].quantity, 2)
+  assert.equal(saved.state.items[0].product.id, 'tshirt-01')
 })

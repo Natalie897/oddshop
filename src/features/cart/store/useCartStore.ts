@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { createJSONStorage, persist } from 'zustand/middleware'
 import type { CartItem } from '../../../types/cart'
 import type { Product } from '../../../types/product'
 
@@ -10,7 +11,9 @@ interface CartStore {
   clearCart: () => void
 }
 
-export const useCartStore = create<CartStore>((set) => ({
+export const useCartStore = create<CartStore>()(
+  persist(
+    (set) => ({
   items: [],
 
   addItem: (product, size, quantity = 1) => {
@@ -74,7 +77,16 @@ export const useCartStore = create<CartStore>((set) => ({
   clearCart: () => {
     set({ items: [] })
   },
-}))
+    }),
+    {
+      name: 'odd-cart-v1',
+      storage: createJSONStorage(() => localStorage),
+      partialize: (state) => ({
+        items: state.items,
+      }),
+    }
+  )
+)
 
 export const selectCartTotal = (state: CartStore): number =>
   state.items.reduce(
