@@ -143,3 +143,37 @@ test('Persist сохраняет товары в localStorage', () => {
   assert.equal(saved.state.items[0].quantity, 2)
   assert.equal(saved.state.items[0].product.id, 'tshirt-01')
 })
+
+test('Persist восстанавливает корзину из localStorage', async () => {
+  const savedCart = {
+    state: {
+      items: [
+        {
+          product: tshirt,
+          size: 'L',
+          quantity: 2,
+        },
+      ],
+    },
+    version: 0,
+  }
+
+  // Сначала очищаем текущее состояние
+  useCartStore.getState().clearCart()
+
+  // Имитируем данные, оставшиеся после прошлого посещения
+  globalThis.localStorage.setItem(
+    'odd-cart-v1',
+    JSON.stringify(savedCart)
+  )
+
+  // Запускаем восстановление
+  await useCartStore.persist.rehydrate()
+
+  const items = useCartStore.getState().items
+
+  assert.equal(items.length, 1)
+  assert.equal(items[0].product.id, 'tshirt-01')
+  assert.equal(items[0].size, 'L')
+  assert.equal(items[0].quantity, 2)
+})
