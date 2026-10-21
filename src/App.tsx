@@ -1,4 +1,12 @@
 import { useState } from 'react'
+import {
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+  useParams,
+} from 'react-router-dom'
 
 import Header from './components/layout/Header'
 import Footer from './components/layout/Footer'
@@ -14,8 +22,6 @@ import { products } from './features/catalog/data/products'
 
 import type { Product } from './types/product'
 
-type Page = 'catalog' | 'product' | 'cart'
-
 const menuCategories: Partial<Record<string, Category>> = {
   'ALL PRODUCTS': 'all',
   'T-SHIRTS': 't-shirts',
@@ -23,11 +29,38 @@ const menuCategories: Partial<Record<string, Category>> = {
   BAGS: 'bags',
 }
 
-function App() {
-  const [page, setPage] = useState<Page>('catalog')
+interface ProductRouteProps {
+  onBack: () => void
+  onAddToBag: (product: Product, size?: string) => void
+}
 
-  const [selectedProduct, setSelectedProduct] =
-    useState<Product | null>(null)
+function ProductRoute({
+  onBack,
+  onAddToBag,
+}: ProductRouteProps) {
+  const { productId } = useParams()
+
+  const product = products.find(
+    (item) => item.id === productId
+  )
+
+  if (!product) {
+    return <Navigate to="/catalog" replace />
+  }
+
+  return (
+    <ProductPage
+      key={product.id}
+      product={product}
+      onBack={onBack}
+      onAddToBag={onAddToBag}
+    />
+  )
+}
+
+function App() {
+  const navigate = useNavigate()
+  const location = useLocation()
 
   const [catalogCategory, setCatalogCategory] =
     useState<Category>('all')
@@ -38,31 +71,25 @@ function App() {
   const addItem = useCartStore((state) => state.addItem)
 
   function openCatalog() {
-    setPage('catalog')
-    setSelectedProduct(null)
     setIsMenuOpen(false)
     setMenuNotice(null)
+    navigate('/catalog')
     window.scrollTo(0, 0)
   }
 
   function openProduct(productId: string) {
-    const product = products.find(
-      (item) => item.id === productId
-    )
+    if (!products.some((item) => item.id === productId)) return
 
-    if (!product) return
-
-    setSelectedProduct(product)
-    setPage('product')
     setIsMenuOpen(false)
     setMenuNotice(null)
+    navigate(`/product/${encodeURIComponent(productId)}`)
     window.scrollTo(0, 0)
   }
 
   function openCart() {
-    setPage('cart')
     setIsMenuOpen(false)
     setMenuNotice(null)
+    navigate('/cart')
     window.scrollTo(0, 0)
   }
 
@@ -82,11 +109,12 @@ function App() {
       return
     }
 
-    // Информационные разделы пока не реализованы
     setMenuNotice(`${section} — COMING SOON`)
   }
 
-  const isDark = page !== 'catalog'
+  const isDark =
+    location.pathname === '/cart' ||
+    location.pathname.startsWith('/product/')
 
   return (
     <div
@@ -111,24 +139,43 @@ function App() {
         </p>
       )}
 
-      {page === 'catalog' && (
-        <CatalogPage
-          selectedCategory={catalogCategory}
-          onCategoryChange={setCatalogCategory}
-          onProductClick={openProduct}
+      <Routes>
+        <Route
+          path="/"
+          element={<Navigate to="/catalog" replace />}
         />
-      )}
 
-      {page === 'product' && selectedProduct && (
-        <ProductPage
-          key={selectedProduct.id}
-          product={selectedProduct}
-          onBack={openCatalog}
-          onAddToBag={handleAddToBag}
+        <Route
+          path="/catalog"
+          element={
+            <CatalogPage
+              selectedCategory={catalogCategory}
+              onCategoryChange={setCatalogCategory}
+              onProductClick={openProduct}
+            />
+          }
         />
-      )}
 
-      {page === 'cart' && <CartPage />}
+        <Route
+          path="/product/:productId"
+          element={
+            <ProductRoute
+              onBack={openCatalog}
+              onAddToBag={handleAddToBag}
+            />
+          }
+        />
+
+        <Route
+          path="/cart"
+          element={<CartPage />}
+        />
+
+        <Route
+          path="*"
+          element={<Navigate to="/catalog" replace />}
+        />
+      </Routes>
 
       <Footer theme={isDark ? 'dark' : 'light'} />
 
