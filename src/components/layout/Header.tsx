@@ -1,5 +1,6 @@
 
 import { Menu } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { useCartStore } from '../../features/cart/store/useCartStore'
 
 interface HeaderProps {
@@ -30,10 +31,10 @@ export default function Header({
           : 'bg-white text-black'
       }`}
     >
-      {/* Логотип ODD */}
+      {/* ODD logo */}
       <div className="absolute left-1/2 top-3 flex -translate-x-1/2 flex-col items-center">
-        <a
-          href="/"
+        <Link
+          to="/"
           aria-label="ODD Clothes - Home"
           className="flex flex-col items-center text-inherit no-underline"
         >
@@ -44,9 +45,9 @@ export default function Header({
           <span className="text-sm font-bold tracking-tight">
             Clothes
           </span>
-        </a>
+        </Link>
 
-        {/* Счётчик корзины */}
+        {/* Cart counter */}
         <button
           type="button"
           onClick={onCartClick}
@@ -57,7 +58,7 @@ export default function Header({
         </button>
       </div>
 
-      {/* Кнопка меню */}
+      {/* Mobile menu button */}
       <button
         type="button"
         onClick={onMenuClick}

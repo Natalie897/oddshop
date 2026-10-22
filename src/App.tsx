@@ -11,17 +11,23 @@ import {
 
 import Header from './components/layout/Header'
 import Footer from './components/layout/Footer'
+import MobileMenu from './components/layout/MobileMenu'
+
 import CartPage from './features/cart/CartPage'
 
 import { CatalogPage } from './features/catalog/pages/CatalogPage'
+import type { Category } from './features/catalog/pages/CatalogPage'
 import { ProductPage } from './features/catalog/pages/ProductPage'
 import { products } from './features/catalog/data/products'
 
-function ProductRoute({
-  onBack,
-}: {
-  onBack: () => void
-}) {
+const menuCategories: Partial<Record<string, Category>> = {
+  'ALL PRODUCTS': 'all',
+  'T-SHIRTS': 't-shirts',
+  CAPS: 'caps',
+  BAGS: 'bags',
+}
+
+function ProductRoute({ onBack }: { onBack: () => void }) {
   const { productId } = useParams<{ productId: string }>()
 
   const product = products.find(
@@ -45,82 +51,99 @@ function App() {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [catalogCategory, setCatalogCategory] =
+    useState<Category>('all')
 
-  const isDark = location.pathname !== '/'
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [menuNotice, setMenuNotice] = useState<string | null>(null)
+
+  const isDark =
+    location.pathname === '/cart' ||
+    location.pathname.startsWith('/product/')
 
   function openCatalog() {
-    navigate('/')
     setIsMenuOpen(false)
+    setMenuNotice(null)
+    navigate('/')
     window.scrollTo(0, 0)
   }
 
   function openProduct(productId: string) {
-    navigate(`/product/${productId}`)
+    if (!products.some((item) => item.id === productId)) {
+      return
+    }
+
     setIsMenuOpen(false)
+    setMenuNotice(null)
+
+    navigate('/product/' + encodeURIComponent(productId))
     window.scrollTo(0, 0)
   }
 
   function openCart() {
-    navigate('/cart')
     setIsMenuOpen(false)
+    setMenuNotice(null)
+    navigate('/cart')
     window.scrollTo(0, 0)
+  }
+
+  function handleMenuNavigate(section: string) {
+    const category = menuCategories[section]
+
+    if (category) {
+      setCatalogCategory(category)
+      openCatalog()
+      return
+    }
+
+    setMenuNotice(section + ' - COMING SOON')
+    setIsMenuOpen(false)
   }
 
   return (
     <div
-      className={`min-h-screen ${
-        isDark
+      className={
+        'min-h-screen ' +
+        (isDark
           ? 'bg-black text-white'
-          : 'bg-white text-black'
-      }`}
+          : 'bg-white text-black')
+      }
     >
       <Header
         theme={isDark ? 'dark' : 'light'}
-        onMenuClick={() => setIsMenuOpen((open) => !open)}
+        onMenuClick={() => setIsMenuOpen(true)}
         onCartClick={openCart}
       />
 
-      {isMenuOpen && (
-        <nav
-          aria-label="Main navigation"
-          className={`border-b px-6 py-6 ${
-            isDark
-              ? 'border-neutral-800 bg-black'
-              : 'border-neutral-200 bg-white'
-          }`}
+      {menuNotice && (
+        <p
+          role="status"
+          className="bg-neutral-900 px-5 py-3 text-center text-xs font-bold uppercase text-white"
         >
-          <button
-            type="button"
-            onClick={openCatalog}
-            className="block cursor-pointer font-['Barlow_Condensed'] text-xl font-bold uppercase hover:opacity-60"
-          >
-            ALL PRODUCTS
-          </button>
-
-          <button
-            type="button"
-            onClick={openCart}
-            className="mt-4 block cursor-pointer font-['Barlow_Condensed'] text-xl font-bold uppercase hover:opacity-60"
-          >
-            YOUR BAG
-          </button>
-        </nav>
+          {menuNotice}
+        </p>
       )}
 
       <Routes>
         <Route
           path="/"
           element={
-            <CatalogPage onProductClick={openProduct} />
+            <CatalogPage
+              selectedCategory={catalogCategory}
+              onCategoryChange={setCatalogCategory}
+              onProductClick={openProduct}
+            />
           }
         />
 
         <Route
+          path="/catalog"
+          element={<Navigate to="/" replace />}
+        />
+
+        <Route
           path="/product/:productId"
-          element={
-            <ProductRoute onBack={openCatalog} />
-          }
+          element={<ProductRoute onBack={openCatalog} />}
         />
 
         <Route
@@ -135,6 +158,14 @@ function App() {
       </Routes>
 
       <Footer theme={isDark ? 'dark' : 'light'} />
+
+      <MobileMenu
+        isOpen={isMenuOpen}
+        onClose={() => setIsMenuOpen(false)}
+        products={products}
+        onNavigate={handleMenuNavigate}
+        onProductSelect={(product) => openProduct(product.id)}
+      />
     </div>
   )
 }
