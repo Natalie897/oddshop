@@ -1,20 +1,19 @@
 ﻿
 import { useState } from 'react'
 import type { Product } from '../../../types/product'
+import { useCartStore } from '../../cart/store/useCartStore'
 
 interface ProductPageProps {
   product: Product
   onBack?: () => void
-  onAddToBag: (product: Product, size?: string) => void
 }
 
-export function ProductPage({
-  product,
-  onBack,
-  onAddToBag,
-}: ProductPageProps) {
+export function ProductPage({ product, onBack }: ProductPageProps) {
   const [selectedSize, setSelectedSize] = useState<string | null>(null)
   const [openSection, setOpenSection] = useState<string | null>(null)
+  const [addedToBag, setAddedToBag] = useState(false)
+
+  const addItem = useCartStore((state) => state.addItem)
 
   const sizes = product.sizes ?? []
   const requiresSize = sizes.length > 0
@@ -24,10 +23,26 @@ export function ProductPage({
 
   const detailImage = `/images/products/detail/${product.id}.png`
 
+  const canAddToBag =
+    product.price !== null &&
+    (!requiresSize || selectedSize !== null)
+
   function toggleSection(section: string) {
     setOpenSection((current) =>
       current === section ? null : section
     )
+  }
+
+  function handleAddToBag() {
+    if (!canAddToBag) return
+
+    addItem(product, selectedSize ?? undefined)
+    setAddedToBag(true)
+  }
+
+  function handleSelectSize(size: string) {
+    setSelectedSize(size)
+    setAddedToBag(false)
   }
 
   return (
@@ -42,7 +57,7 @@ export function ProductPage({
         </button>
 
         <div className="mt-8 grid grid-cols-1 items-center gap-8 lg:mt-10 lg:grid-cols-[1fr_1.65fr_1fr] lg:gap-6">
-          {/* Описание товара */}
+          {/* Левая колонка */}
           <section className="font-['Barlow_Condensed'] lg:self-center">
             <h1 className="text-[22px] font-bold uppercase leading-tight">
               {product.name}
@@ -92,7 +107,7 @@ export function ProductPage({
             </div>
           </section>
 
-          {/* Изображение товара */}
+          {/* Центральная фотография */}
           <section className="relative flex min-h-[290px] items-center justify-center overflow-hidden sm:min-h-[360px] lg:min-h-[430px]">
             <img
               key={product.id}
@@ -111,7 +126,7 @@ export function ProductPage({
             />
           </section>
 
-          {/* Цена, размер и покупка */}
+          {/* Правая колонка — покупка */}
           <section className="font-['Barlow_Condensed'] lg:self-center">
             <p className="text-right text-[14px] font-bold uppercase">
               {product.price === null
@@ -121,11 +136,11 @@ export function ProductPage({
 
             <button
               type="button"
-              disabled={product.price === null || (requiresSize && !selectedSize)}
-              onClick={() => onAddToBag(product, selectedSize ?? undefined)}
+              onClick={handleAddToBag}
+              disabled={!canAddToBag}
               className="mt-3 w-full bg-[#e8eaed] px-5 py-4 text-[17px] font-bold uppercase text-black transition-colors hover:bg-white disabled:cursor-not-allowed disabled:opacity-50"
             >
-              ADD TO BAG
+              {addedToBag ? 'ADDED TO BAG ✓' : 'ADD TO BAG'}
             </button>
 
             {requiresSize && (
@@ -139,7 +154,7 @@ export function ProductPage({
                     <button
                       key={size}
                       type="button"
-                      onClick={() => setSelectedSize(size)}
+                      onClick={() => handleSelectSize(size)}
                       aria-pressed={selectedSize === size}
                       className={`min-w-[44px] cursor-pointer border px-3 py-3 text-[14px] font-bold uppercase transition-colors ${
                         selectedSize === size

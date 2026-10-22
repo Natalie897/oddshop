@@ -13,14 +13,11 @@ import Footer from './components/layout/Footer'
 import MobileMenu from './components/layout/MobileMenu'
 
 import CartPage from './features/cart/CartPage'
-import { useCartStore } from './features/cart/store/useCartStore'
 
 import { CatalogPage } from './features/catalog/pages/CatalogPage'
 import type { Category } from './features/catalog/pages/CatalogPage'
 import { ProductPage } from './features/catalog/pages/ProductPage'
 import { products } from './features/catalog/data/products'
-
-import type { Product } from './types/product'
 
 const menuCategories: Partial<Record<string, Category>> = {
   'ALL PRODUCTS': 'all',
@@ -29,23 +26,15 @@ const menuCategories: Partial<Record<string, Category>> = {
   BAGS: 'bags',
 }
 
-interface ProductRouteProps {
-  onBack: () => void
-  onAddToBag: (product: Product, size?: string) => void
-}
-
-function ProductRoute({
-  onBack,
-  onAddToBag,
-}: ProductRouteProps) {
-  const { productId } = useParams()
+function ProductRoute({ onBack }: { onBack: () => void }) {
+  const { productId } = useParams<{ productId: string }>()
 
   const product = products.find(
     (item) => item.id === productId
   )
 
   if (!product) {
-    return <Navigate to="/catalog" replace />
+    return <Navigate to="/" replace />
   }
 
   return (
@@ -53,7 +42,6 @@ function ProductRoute({
       key={product.id}
       product={product}
       onBack={onBack}
-      onAddToBag={onAddToBag}
     />
   )
 }
@@ -68,21 +56,26 @@ function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [menuNotice, setMenuNotice] = useState<string | null>(null)
 
-  const addItem = useCartStore((state) => state.addItem)
+  const isDark =
+    location.pathname === '/cart' ||
+    location.pathname.startsWith('/product/')
 
   function openCatalog() {
     setIsMenuOpen(false)
     setMenuNotice(null)
-    navigate('/catalog')
+    navigate('/')
     window.scrollTo(0, 0)
   }
 
   function openProduct(productId: string) {
-    if (!products.some((item) => item.id === productId)) return
+    if (!products.some((item) => item.id === productId)) {
+      return
+    }
 
     setIsMenuOpen(false)
     setMenuNotice(null)
-    navigate(`/product/${encodeURIComponent(productId)}`)
+
+    navigate(`/product/$DIL0`)
     window.scrollTo(0, 0)
   }
 
@@ -91,13 +84,6 @@ function App() {
     setMenuNotice(null)
     navigate('/cart')
     window.scrollTo(0, 0)
-  }
-
-  function handleAddToBag(product: Product, size?: string) {
-    if (product.price === null) return
-
-    addItem(product, size)
-    openCart()
   }
 
   function handleMenuNavigate(section: string) {
@@ -109,20 +95,13 @@ function App() {
       return
     }
 
-    setMenuNotice(`${section} — COMING SOON`)
+    setMenuNotice(`$DIL1 - COMING SOON`)
+    setIsMenuOpen(false)
   }
-
-  const isDark =
-    location.pathname === '/cart' ||
-    location.pathname.startsWith('/product/')
 
   return (
     <div
-      className={`min-h-screen ${
-        isDark
-          ? 'bg-black text-white'
-          : 'bg-white text-black'
-      }`}
+      className={`min-h-screen $DIL2`}
     >
       <Header
         theme={isDark ? 'dark' : 'light'}
@@ -142,11 +121,6 @@ function App() {
       <Routes>
         <Route
           path="/"
-          element={<Navigate to="/catalog" replace />}
-        />
-
-        <Route
-          path="/catalog"
           element={
             <CatalogPage
               selectedCategory={catalogCategory}
@@ -157,13 +131,13 @@ function App() {
         />
 
         <Route
+          path="/catalog"
+          element={<Navigate to="/" replace />}
+        />
+
+        <Route
           path="/product/:productId"
-          element={
-            <ProductRoute
-              onBack={openCatalog}
-              onAddToBag={handleAddToBag}
-            />
-          }
+          element={<ProductRoute onBack={openCatalog} />}
         />
 
         <Route
@@ -173,7 +147,7 @@ function App() {
 
         <Route
           path="*"
-          element={<Navigate to="/catalog" replace />}
+          element={<Navigate to="/" replace />}
         />
       </Routes>
 

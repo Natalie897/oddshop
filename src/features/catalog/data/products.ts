@@ -1,10 +1,11 @@
+
 import type { Product } from '../../../types/product'
 
 export const products: Product[] = [
   {
     id: 'odd-cap-checkered',
-    name: 'ODD CAP — CHECKERED',
-    price: null,
+    name: 'ODD CAP - CHECKERED',
+    price: 5200,
     images: ['/images/products/odd-cap-checkered.png'],
     category: 'caps',
     sizes: ['ONE SIZE'],
@@ -12,8 +13,8 @@ export const products: Product[] = [
   },
   {
     id: 'odd-cap-black',
-    name: 'ODD CAP — BLACK',
-    price: null,
+    name: 'ODD CAP - BLACK',
+    price: 5200,
     images: ['/images/products/odd-cap-black.png'],
     category: 'caps',
     sizes: ['ONE SIZE'],
@@ -21,8 +22,8 @@ export const products: Product[] = [
   },
   {
     id: 'odd-cap-dark-blue',
-    name: 'ODD CAP — DARK BLUE',
-    price: null,
+    name: 'ODD CAP - DARK BLUE',
+    price: 5200,
     images: ['/images/products/odd-cap-dark-blue.png'],
     category: 'caps',
     sizes: ['ONE SIZE'],
@@ -30,8 +31,8 @@ export const products: Product[] = [
   },
   {
     id: 'odd-cap-jeans',
-    name: 'ODD CAP — JEANS',
-    price: null,
+    name: 'ODD CAP - JEANS',
+    price: 5200,
     images: ['/images/products/odd-cap-jeans.png'],
     category: 'caps',
     sizes: ['ONE SIZE'],
@@ -39,8 +40,8 @@ export const products: Product[] = [
   },
   {
     id: 'odd-cap-beige',
-    name: 'ODD CAP — BEIGE',
-    price: null,
+    name: 'ODD CAP - BEIGE',
+    price: 5200,
     images: ['/images/products/odd-cap-beige.png'],
     category: 'caps',
     sizes: ['ONE SIZE'],
@@ -48,16 +49,16 @@ export const products: Product[] = [
   },
   {
     id: 'odd-tote-dark-blue',
-    name: 'ODD TOTE — DARK BLUE',
-    price: null,
+    name: 'BAG BLU - NEW EDITION 2026',
+    price: 2700,
     images: ['/images/products/odd-tote-dark-blue.png'],
     category: 'bags',
     sku: 'TOTE / ODD 001',
   },
   {
     id: 'odd-cap-gray',
-    name: 'ODD CAP — GRAY',
-    price: null,
+    name: 'ODD CAP - GRAY',
+    price: 5200,
     images: ['/images/products/odd-cap-gray.png'],
     category: 'caps',
     sizes: ['ONE SIZE'],
@@ -65,8 +66,8 @@ export const products: Product[] = [
   },
   {
     id: 'odd-tee-black',
-    name: 'ODD TEE — BLACK',
-    price: null,
+    name: 'T-SHIRT - 1 EDITION 2026',
+    price: 4900,
     images: ['/images/products/odd-tee-black.png'],
     category: 't-shirts',
     sizes: ['S', 'M', 'L', 'XL'],
@@ -74,8 +75,8 @@ export const products: Product[] = [
   },
   {
     id: 'odd-cap-brown',
-    name: 'ODD CAP — BROWN',
-    price: null,
+    name: 'ODD CAP - BROWN',
+    price: 5200,
     images: ['/images/products/odd-cap-brown.png'],
     category: 'caps',
     sizes: ['ONE SIZE'],
