@@ -1,3 +1,4 @@
+
 import { Menu } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useCartStore } from '../../features/cart/store/useCartStore'
@@ -24,18 +25,18 @@ export default function Header({
 
   return (
     <header
-      className={`relative h-28 w-full border-b ${
+      className={`relative h-28 w-full ${
         isDark
-          ? 'border-neutral-800 bg-black text-white'
-          : 'border-neutral-200 bg-white text-black'
+          ? 'bg-black text-white'
+          : 'bg-white text-black'
       }`}
     >
-      {/* Логотип ODD */}
+      {/* ODD logo */}
       <div className="absolute left-1/2 top-3 flex -translate-x-1/2 flex-col items-center">
         <Link
-        to="/catalog"
-        aria-label="ODD Clothes — Home"
-        className="flex flex-col items-center text-inherit no-underline"
+          to="/"
+          aria-label="ODD Clothes - Home"
+          className="flex flex-col items-center text-inherit no-underline"
         >
           <span className="text-4xl font-black lowercase leading-none tracking-tighter">
             odd.
@@ -46,7 +47,7 @@ export default function Header({
           </span>
         </Link>
 
-        {/* Счётчик корзины */}
+        {/* Cart counter */}
         <button
           type="button"
           onClick={onCartClick}
@@ -57,7 +58,7 @@ export default function Header({
         </button>
       </div>
 
-      {/* Кнопка меню */}
+      {/* Mobile menu button */}
       <button
         type="button"
         onClick={onMenuClick}

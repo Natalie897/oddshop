@@ -1,3 +1,4 @@
+
 import { useState } from 'react'
 import {
   Navigate,
@@ -75,7 +76,7 @@ function App() {
     setIsMenuOpen(false)
     setMenuNotice(null)
 
-    navigate(`/product/$DIL0`)
+    navigate('/product/' + encodeURIComponent(productId))
     window.scrollTo(0, 0)
   }
 
@@ -95,13 +96,18 @@ function App() {
       return
     }
 
-    setMenuNotice(`$DIL1 - COMING SOON`)
+    setMenuNotice(section + ' - COMING SOON')
     setIsMenuOpen(false)
   }
 
   return (
     <div
-      className={`min-h-screen $DIL2`}
+      className={
+        'min-h-screen ' +
+        (isDark
+          ? 'bg-black text-white'
+          : 'bg-white text-black')
+      }
     >
       <Header
         theme={isDark ? 'dark' : 'light'}
