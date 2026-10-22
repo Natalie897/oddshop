@@ -1,3 +1,4 @@
+
 import { Menu } from 'lucide-react'
 import { useCartStore } from '../../features/cart/store/useCartStore'
 
@@ -23,17 +24,17 @@ export default function Header({
 
   return (
     <header
-      className={`relative h-28 w-full border-b ${
+      className={`relative h-28 w-full ${
         isDark
-          ? 'border-neutral-800 bg-black text-white'
-          : 'border-neutral-200 bg-white text-black'
+          ? 'bg-black text-white'
+          : 'bg-white text-black'
       }`}
     >
       {/* Логотип ODD */}
       <div className="absolute left-1/2 top-3 flex -translate-x-1/2 flex-col items-center">
         <a
           href="/"
-          aria-label="ODD Clothes — Home"
+          aria-label="ODD Clothes - Home"
           className="flex flex-col items-center text-inherit no-underline"
         >
           <span className="text-4xl font-black lowercase leading-none tracking-tighter">

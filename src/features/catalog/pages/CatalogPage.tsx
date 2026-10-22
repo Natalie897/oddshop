@@ -27,7 +27,7 @@ export function CatalogPage({ onProductClick }: CatalogPageProps) {
     <main className="min-h-screen bg-white text-black">
       <div className="mx-auto max-w-[1440px] px-5 pb-16 pt-6 md:px-9">
         {/* Фильтры и сортировка */}
-        <div className="mb-8 flex flex-wrap items-center justify-between gap-5">
+        <div className="flex flex-wrap items-center justify-between gap-5">
           <nav
             aria-label="Product categories"
             className="flex flex-wrap items-center gap-6 md:gap-9"
