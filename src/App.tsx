@@ -1,4 +1,13 @@
+
 import { useState } from 'react'
+import {
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+  useParams,
+} from 'react-router-dom'
 
 import Header from './components/layout/Header'
 import Footer from './components/layout/Footer'
@@ -8,44 +17,55 @@ import { CatalogPage } from './features/catalog/pages/CatalogPage'
 import { ProductPage } from './features/catalog/pages/ProductPage'
 import { products } from './features/catalog/data/products'
 
-import type { Product } from './types/product'
+function ProductRoute({
+  onBack,
+}: {
+  onBack: () => void
+}) {
+  const { productId } = useParams<{ productId: string }>()
 
-type Page = 'catalog' | 'product' | 'cart'
+  const product = products.find(
+    (item) => item.id === productId
+  )
+
+  if (!product) {
+    return <Navigate to="/" replace />
+  }
+
+  return (
+    <ProductPage
+      key={product.id}
+      product={product}
+      onBack={onBack}
+    />
+  )
+}
 
 function App() {
-  const [page, setPage] = useState<Page>('catalog')
-  const [selectedProduct, setSelectedProduct] =
-    useState<Product | null>(null)
+  const navigate = useNavigate()
+  const location = useLocation()
 
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
+  const isDark = location.pathname !== '/'
+
   function openCatalog() {
-    setPage('catalog')
-    setSelectedProduct(null)
+    navigate('/')
     setIsMenuOpen(false)
     window.scrollTo(0, 0)
   }
 
   function openProduct(productId: string) {
-    const product = products.find(
-      (item) => item.id === productId
-    )
-
-    if (!product) return
-
-    setSelectedProduct(product)
-    setPage('product')
+    navigate(`/product/${productId}`)
     setIsMenuOpen(false)
     window.scrollTo(0, 0)
   }
 
   function openCart() {
-    setPage('cart')
+    navigate('/cart')
     setIsMenuOpen(false)
     window.scrollTo(0, 0)
   }
-
-  const isDark = page !== 'catalog'
 
   return (
     <div
@@ -88,19 +108,31 @@ function App() {
         </nav>
       )}
 
-      {page === 'catalog' && (
-        <CatalogPage onProductClick={openProduct} />
-      )}
-
-      {page === 'product' && selectedProduct && (
-        <ProductPage
-          key={selectedProduct.id}
-          product={selectedProduct}
-          onBack={openCatalog}
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <CatalogPage onProductClick={openProduct} />
+          }
         />
-      )}
 
-      {page === 'cart' && <CartPage />}
+        <Route
+          path="/product/:productId"
+          element={
+            <ProductRoute onBack={openCatalog} />
+          }
+        />
+
+        <Route
+          path="/cart"
+          element={<CartPage />}
+        />
+
+        <Route
+          path="*"
+          element={<Navigate to="/" replace />}
+        />
+      </Routes>
 
       <Footer theme={isDark ? 'dark' : 'light'} />
     </div>
