@@ -16,7 +16,13 @@ export function ProductPage({ product, onBack }: ProductPageProps) {
   const addItem = useCartStore((state) => state.addItem)
 
   const sizes = product.sizes ?? []
-  const requiresSize = sizes.length > 0
+
+  const requiresSize = sizes.length > 1
+
+  const sizeForCart =
+    sizes.length === 1
+      ? sizes[0]
+      : selectedSize ?? undefined
 
   const isTshirt = product.category === 't-shirts'
   const isCap = product.category === 'caps'
@@ -36,7 +42,7 @@ export function ProductPage({ product, onBack }: ProductPageProps) {
   function handleAddToBag() {
     if (!canAddToBag) return
 
-    addItem(product, selectedSize ?? undefined)
+    addItem(product, sizeForCart)
     setAddedToBag(true)
   }
 
@@ -143,6 +149,13 @@ export function ProductPage({ product, onBack }: ProductPageProps) {
               {addedToBag ? 'ADDED TO BAG ✓' : 'ADD TO BAG'}
             </button>
 
+            {sizes.length === 1 && (
+              <div className="mt-7">
+                <p className="text-[14px] font-bold uppercase">
+                  SIZE: {sizes[0]}
+                </p>
+              </div>
+            )}
             {requiresSize && (
               <div className="mt-7">
                 <p className="mb-2 text-[14px] font-bold uppercase">
