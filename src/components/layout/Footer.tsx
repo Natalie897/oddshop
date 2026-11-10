@@ -31,9 +31,15 @@ export default function Footer({
         }`}
       >
         {/* Название бренда */}
-        <div className="text-3xl font-black uppercase tracking-tighter sm:text-4xl">
-          ODD MOSCOW
-        </div>
+        <img
+          src={
+            theme === 'dark'
+              ? '/images/odd-logo-white.png'
+              : '/images/odd-logo-black.png'
+          }
+          alt="ODD Clothes"
+          className="h-auto w-44 sm:w-52"
+        />
 
         {/* Разделы сайта */}
         <div className="mt-7 flex flex-wrap gap-x-6 gap-y-4">

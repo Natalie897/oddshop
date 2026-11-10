@@ -14,6 +14,8 @@ import Footer from './components/layout/Footer'
 import MobileMenu from './components/layout/MobileMenu'
 
 import CartPage from './features/cart/CartPage'
+import ShippingReturnsPage from './features/info/pages/ShippingReturnsPage'
+import FaqPage from './features/info/pages/FaqPage'
 
 import { CatalogPage } from './features/catalog/pages/CatalogPage'
 import type { Category } from './features/catalog/pages/CatalogPage'
@@ -59,7 +61,9 @@ function App() {
 
   const isDark =
     location.pathname === '/cart' ||
-    location.pathname.startsWith('/product/')
+    location.pathname.startsWith('/product/') ||
+    location.pathname === '/faq' ||
+    location.pathname === '/shipping-returns'
 
   function openCatalog() {
     setIsMenuOpen(false)
@@ -88,6 +92,19 @@ function App() {
   }
 
   function handleMenuNavigate(section: string) {
+    if (section === 'FAQ' || section === 'SHIPPING & RETURNS') {
+      setIsMenuOpen(false)
+      setMenuNotice(null)
+
+      navigate(
+        section === 'FAQ'
+          ? '/faq'
+          : '/shipping-returns'
+      )
+
+      window.scrollTo(0, 0)
+      return
+    }
     const category = menuCategories[section]
 
     if (category) {
@@ -149,6 +166,15 @@ function App() {
         <Route
           path="/cart"
           element={<CartPage />}
+        />
+        <Route
+          path="/faq"
+          element={<FaqPage />}
+        />
+
+        <Route
+          path="/shipping-returns"
+          element={<ShippingReturnsPage />}
         />
 
         <Route

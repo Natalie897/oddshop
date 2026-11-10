@@ -3,6 +3,8 @@ import { useState } from 'react'
 import type { Product } from '../../../types/product'
 import { useCartStore } from '../../cart/store/useCartStore'
 
+import { Link } from 'react-router-dom'
+
 interface ProductPageProps {
   product: Product
   onBack?: () => void
@@ -200,9 +202,19 @@ export function ProductPage({ product, onBack }: ProductPageProps) {
               </button>
 
               {openSection === 'shipping' && (
-                <p className="py-4 text-[13px] text-neutral-300">
-                  Shipping and returns information will be added before launch.
-                </p>
+                <div className="py-4 text-[13px] leading-6 text-neutral-300">
+                  <p>
+                    Delivery options, shipping costs and return
+                    conditions will be confirmed before checkout opens.
+                  </p>
+
+                  <Link
+                    to="/shipping-returns"
+                    className="mt-4 inline-block font-bold uppercase text-white underline underline-offset-4 transition-colors hover:text-neutral-400"
+                  >
+                    VIEW SHIPPING & RETURNS →
+                  </Link>
+                </div>
               )}
 
               <button

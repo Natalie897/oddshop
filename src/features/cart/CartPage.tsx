@@ -5,6 +5,8 @@ import {
   selectCanCheckout,
 } from './store/useCartStore'
 
+import { Link } from 'react-router-dom'
+
 const formatPrice = (price: number) =>
   new Intl.NumberFormat('ru-RU').format(price)
 
@@ -70,23 +72,34 @@ export default function CartPage() {
                       className="flex gap-4 py-5 sm:gap-6"
                     >
                       {/* Изображение товара */}
-                      {product.images[0] ? (
-                        <img
-                          src={product.images[0]}
-                          alt={product.name}
-                          loading="lazy"
-                          className="h-28 w-28 shrink-0 bg-neutral-200 object-contain sm:h-32 sm:w-32"
-                        />
-                      ) : (
-                        <div className="flex h-28 w-28 shrink-0 items-center justify-center bg-neutral-200 text-xs text-neutral-500 sm:h-32 sm:w-32">
-                          NO IMAGE
-                        </div>
-                      )}
+                      <Link
+                        to={`/product/${encodeURIComponent(product.id)}`}
+                        aria-label={`View ${product.name}`}
+                        className="block h-28 w-28 shrink-0 overflow-hidden bg-neutral-200 sm:h-32 sm:w-32"
+                      >
+                        {product.images[0] ? (
+                          <img
+                            src={product.images[0]}
+                            alt={product.name}
+                            loading="lazy"
+                            className="h-full w-full object-contain transition-transform duration-300 hover:scale-105"
+                          />
+                        ) : (
+                          <div className="flex h-full w-full items-center justify-center text-xs text-neutral-500">
+                            NO IMAGE
+                          </div>
+                        )}
+                      </Link>
 
                       {/* Информация о товаре */}
                       <div className="flex min-w-0 flex-1 flex-col">
                         <h2 className="m-0 text-base font-black uppercase sm:text-lg">
-                          {product.name}
+                          <Link
+                            to={`/product/${encodeURIComponent(product.id)}`}
+                            className="transition-colors hover:text-neutral-400 focus-visible:outline-2 focus-visible:outline-white"
+                          >
+                            {product.name}
+                          </Link>
                         </h2>
 
                         <p className="mt-2 text-xs uppercase text-neutral-500">
