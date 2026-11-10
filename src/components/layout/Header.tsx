@@ -1,6 +1,6 @@
 
 import { Menu } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useCartStore } from '../../features/cart/store/useCartStore'
 
 interface HeaderProps {
@@ -14,6 +14,8 @@ export default function Header({
   onCartClick,
   theme = 'light',
 }: HeaderProps) {
+  const location = useLocation()
+
   const itemCount = useCartStore((state) =>
     state.items.reduce(
       (total, item) => total + item.quantity,
@@ -22,6 +24,9 @@ export default function Header({
   )
 
   const isDark = theme === 'dark'
+
+  // Hide cart counter on Campaigns page only
+  const showCart = location.pathname !== '/campaigns'
 
   return (
     <header
@@ -48,14 +53,16 @@ export default function Header({
         </Link>
 
         {/* Cart counter */}
-        <button
-          type="button"
-          onClick={onCartClick}
-          aria-label={`Open cart with ${itemCount} items`}
-          className="mt-2 whitespace-nowrap text-xs font-bold uppercase tracking-wider hover:opacity-60"
-        >
-          CART ( {itemCount} )
-        </button>
+        {showCart && (
+          <button
+            type="button"
+            onClick={onCartClick}
+            aria-label={`Open cart with ${itemCount} items`}
+            className="mt-2 whitespace-nowrap text-xs font-bold uppercase tracking-wider hover:opacity-60"
+          >
+            CART ( {itemCount} )
+          </button>
+        )}
       </div>
 
       {/* Mobile menu button */}

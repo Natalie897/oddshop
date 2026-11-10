@@ -1,19 +1,18 @@
+
+import { Link } from 'react-router-dom'
+
 interface FooterProps {
   theme?: 'light' | 'dark'
 }
-
-const footerItems = [
-  'ALL PRODUCTS',
-  'CAMPAIGNS',
-  'OUR STORY',
-  'FAQ',
-  'INSTAGRAM ↗',
-]
 
 export default function Footer({
   theme = 'light',
 }: FooterProps) {
   const isDark = theme === 'dark'
+
+  const linkClass =
+    'text-xs font-bold uppercase tracking-wide ' +
+    'transition-opacity duration-200 hover:opacity-50'
 
   return (
     <footer
@@ -36,16 +35,34 @@ export default function Footer({
         </div>
 
         {/* Разделы сайта */}
-        <div className="mt-7 flex flex-wrap gap-x-6 gap-y-4">
-          {footerItems.map((item) => (
-            <span
-              key={item}
-              className="text-xs font-bold uppercase tracking-wide"
-            >
-              {item}
-            </span>
-          ))}
-        </div>
+        <nav
+          aria-label="Footer navigation"
+          className="mt-7 flex flex-wrap gap-x-6 gap-y-4"
+        >
+          <Link
+            to="/"
+            className={linkClass}
+            onClick={() => window.scrollTo(0, 0)}
+          >
+            ALL PRODUCTS
+          </Link>
+
+          <Link
+            to="/campaigns"
+            className={linkClass}
+            onClick={() => window.scrollTo(0, 0)}
+          >
+            CAMPAIGNS
+          </Link>
+
+          <span className="text-xs font-bold uppercase tracking-wide">
+            FAQ
+          </span>
+
+          <span className="text-xs font-bold uppercase tracking-wide">
+            INSTAGRAM ↗
+          </span>
+        </nav>
 
         {/* Нижняя подпись */}
         <div
