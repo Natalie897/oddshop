@@ -54,6 +54,7 @@ function CampaignCard({ campaign }: { campaign: Campaign }) {
     if (!element) return
 
     if (!('IntersectionObserver' in window)) {
+      setVisible(true)
       return
     }
 
@@ -128,12 +129,13 @@ function CampaignCard({ campaign }: { campaign: Campaign }) {
 
 export function CampaignsPage() {
   return (
-    <main className="min-h-screen bg-black text-white">
-      <section className="px-4 pb-9 pt-5 md:pb-11 md:pt-7">
+    <main className="min-h-screen overflow-x-clip bg-black text-white">
+      {/* PAGE TITLE */}
+      <section className="px-4 pb-6 pt-0 md:pb-11 md:pt-7">
         <h1
           className={
             "font-['Barlow_Condensed'] text-center " +
-            'text-5xl font-black uppercase tracking-tight ' +
+            'text-[42px] font-black uppercase leading-none tracking-tight ' +
             'md:text-6xl'
           }
         >
@@ -141,6 +143,7 @@ export function CampaignsPage() {
         </h1>
       </section>
 
+      {/* GALLERY */}
       <section
         aria-label="ODD campaigns gallery"
         className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3"

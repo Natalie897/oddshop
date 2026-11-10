@@ -1,9 +1,21 @@
 
+import { ArrowUpRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 interface FooterProps {
   theme?: 'light' | 'dark'
 }
+
+const socialLinks = [
+  {
+    label: 'INSTAGRAM',
+    href: 'https://www.instagram.com/odd.moscow/',
+  },
+  {
+    label: 'TELEGRAM',
+    href: 'https://t.me/odd_clothes',
+  },
+]
 
 export default function Footer({
   theme = 'light',
@@ -11,38 +23,63 @@ export default function Footer({
   const isDark = theme === 'dark'
 
   const linkClass =
-    'text-xs font-bold uppercase tracking-wide ' +
+    "inline-flex items-center gap-1 font-['Barlow_Condensed'] " +
+    'text-[13px] font-semibold uppercase tracking-wide ' +
     'transition-opacity duration-200 hover:opacity-50'
+
+  function scrollToTop() {
+    window.scrollTo(0, 0)
+  }
 
   return (
     <footer
-      className={`w-full ${
-        isDark
+      className={
+        "w-full font-['Barlow_Condensed'] " +
+        (isDark
           ? 'bg-black text-white'
-          : 'bg-white text-black'
-      }`}
+          : 'bg-white text-black')
+      }
     >
       <div
-        className={`mx-auto max-w-6xl border-t px-5 py-9 sm:px-8 ${
-          isDark
-            ? 'border-neutral-600'
-            : 'border-neutral-400'
-        }`}
+        className={
+          'mx-auto max-w-6xl border-t px-5 pb-7 pt-9 sm:px-8 sm:pb-9 sm:pt-12 ' +
+          (isDark
+            ? 'border-neutral-700'
+            : 'border-neutral-300')
+        }
       >
-        {/* Название бренда */}
-        <div className="text-3xl font-black uppercase tracking-tighter sm:text-4xl">
-          ODD MOSCOW
+        {/* BRAND */}
+        <div>
+          <div className="text-[30px] font-bold uppercase leading-none tracking-tight sm:text-[36px]">
+            ODD MOSCOW
+          </div>
+
+          <p
+            className={
+              'mt-3 text-[12px] font-medium uppercase tracking-wide ' +
+              (isDark
+                ? 'text-neutral-400'
+                : 'text-neutral-600')
+            }
+          >
+            WEAR WHAT MOVES YOU.
+          </p>
         </div>
 
-        {/* Разделы сайта */}
+        {/* NAVIGATION AND SOCIALS */}
         <nav
           aria-label="Footer navigation"
-          className="mt-7 flex flex-wrap gap-x-6 gap-y-4"
+          className={
+            'mt-9 flex flex-wrap items-center gap-x-7 gap-y-4 border-t pt-6 sm:mt-10 ' +
+            (isDark
+              ? 'border-neutral-800'
+              : 'border-neutral-200')
+          }
         >
           <Link
             to="/"
             className={linkClass}
-            onClick={() => window.scrollTo(0, 0)}
+            onClick={scrollToTop}
           >
             ALL PRODUCTS
           </Link>
@@ -50,31 +87,53 @@ export default function Footer({
           <Link
             to="/campaigns"
             className={linkClass}
-            onClick={() => window.scrollTo(0, 0)}
+            onClick={scrollToTop}
           >
             CAMPAIGNS
           </Link>
 
-          <span className="text-xs font-bold uppercase tracking-wide">
+          <Link
+            to="/faq"
+            className={linkClass}
+            onClick={scrollToTop}
+          >
             FAQ
-          </span>
+          </Link>
 
-          <span className="text-xs font-bold uppercase tracking-wide">
-            INSTAGRAM ↗
-          </span>
+          <Link
+            to="/shipping-returns"
+            className={linkClass}
+            onClick={scrollToTop}
+          >
+            SHIPPING & RETURNS
+          </Link>
+
+          {socialLinks.map((social) => (
+            <a
+              key={social.label}
+              href={social.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={linkClass}
+            >
+              {social.label}
+              <ArrowUpRight size={14} strokeWidth={1.5} />
+            </a>
+          ))}
         </nav>
 
-        {/* Нижняя подпись */}
+        {/* COPYRIGHT */}
         <div
-          className={`mt-12 flex flex-wrap gap-x-3 gap-y-1 text-[10px] uppercase tracking-wide ${
-            isDark
-              ? 'text-neutral-400'
-              : 'text-neutral-500'
-          }`}
+          className={
+            'mt-10 flex flex-wrap items-center justify-between gap-3 ' +
+            'text-[11px] font-medium uppercase tracking-wide ' +
+            (isDark
+              ? 'text-neutral-500'
+              : 'text-neutral-600')
+          }
         >
           <span>© ODD PROJECT 2026</span>
-          <span>/</span>
-          <span>WEAR WHAT MOVES YOU.</span>
+          <span>MOSCOW</span>
         </div>
       </div>
     </footer>
