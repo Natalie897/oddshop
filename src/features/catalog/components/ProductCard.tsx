@@ -1,3 +1,4 @@
+
 import type { Product } from '../../../types/product'
 
 interface ProductCardProps {
@@ -5,16 +6,11 @@ interface ProductCardProps {
   onClick?: () => void
 }
 
-export function ProductCard({ product, onClick }: ProductCardProps) {
+export function ProductCard({
+  product,
+  onClick,
+}: ProductCardProps) {
   const image = `/images/products/detail/${product.id}.png`
-
-  const imageScale: Record<string, string> = {
-    'odd-cap-checkered': 'scale-[0.75] hover:scale-[0.78]',
-    'odd-cap-black': 'scale-[0.75] hover:scale-[0.78]',
-  }
-
-  const scale =
-    imageScale[product.id] ?? 'scale-[0.75] hover:scale-[0.78]'
 
   return (
     <article className="w-full text-center">
@@ -27,7 +23,7 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
           <img
             src={image}
             alt={product.name}
-            className={`h-full w-full object-contain transition-transform duration-300 ${scale}`}
+            className="h-full w-full scale-[0.90] object-contain transition-transform duration-300 hover:scale-[0.94]"
           />
         </div>
 
@@ -39,7 +35,7 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
           <p className="mt-1 font-['Barlow_Condensed'] text-[13px] font-medium uppercase leading-tight">
             {product.price === null
               ? 'PRICE TBC'
-              : `${product.price.toLocaleString('ru-RU')} ₽`}
+              : product.price.toLocaleString('ru-RU') + ' ₽'}
           </p>
 
           {product.sku && (

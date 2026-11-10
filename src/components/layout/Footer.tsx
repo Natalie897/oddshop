@@ -1,19 +1,18 @@
+
+import { Link } from 'react-router-dom'
+
 interface FooterProps {
   theme?: 'light' | 'dark'
 }
-
-const footerItems = [
-  'ALL PRODUCTS',
-  'CAMPAIGNS',
-  'OUR STORY',
-  'FAQ',
-  'INSTAGRAM ↗',
-]
 
 export default function Footer({
   theme = 'light',
 }: FooterProps) {
   const isDark = theme === 'dark'
+
+  const linkClass =
+    'text-xs font-bold uppercase tracking-wide ' +
+    'transition-opacity duration-200 hover:opacity-50'
 
   return (
     <footer
@@ -31,27 +30,55 @@ export default function Footer({
         }`}
       >
         {/* Название бренда */}
-        <img
-          src={
-            theme === 'dark'
-              ? '/images/odd-logo-white.png'
-              : '/images/odd-logo-black.png'
-          }
-          alt="ODD Clothes"
-          className="h-auto w-44 sm:w-52"
-        />
+        <div className="font-['Barlow_Condensed'] text-4xl font-extrabold uppercase tracking-tighter sm:text-5xl">
+          ODD MOSCOW
+        </div>
 
         {/* Разделы сайта */}
-        <div className="mt-7 flex flex-wrap gap-x-6 gap-y-4">
-          {footerItems.map((item) => (
-            <span
-              key={item}
-              className="text-xs font-bold uppercase tracking-wide"
-            >
-              {item}
-            </span>
-          ))}
-        </div>
+        <nav
+          aria-label="Footer navigation"
+          className="mt-7 flex flex-wrap gap-x-6 gap-y-4"
+        >
+          <Link
+            to="/"
+            className={linkClass}
+            onClick={() => window.scrollTo(0, 0)}
+          >
+            ALL PRODUCTS
+          </Link>
+
+          <Link
+            to="/campaigns"
+            className={linkClass}
+            onClick={() => window.scrollTo(0, 0)}
+          >
+            CAMPAIGNS
+          </Link>
+
+          <span className="text-xs font-bold uppercase tracking-wide">
+            OUR STORY
+          </span>
+
+          <Link
+            to="/faq"
+            className={linkClass}
+            onClick={() => window.scrollTo(0, 0)}
+          >
+            FAQ
+          </Link>
+
+          <Link
+            to="/shipping-returns"
+            className={linkClass}
+            onClick={() => window.scrollTo(0, 0)}
+          >
+            SHIPPING & RETURNS
+          </Link>
+
+          <span className="text-xs font-bold uppercase tracking-wide">
+            INSTAGRAM ↗
+          </span>
+        </nav>
 
         {/* Нижняя подпись */}
         <div

@@ -16,11 +16,11 @@ import MobileMenu from './components/layout/MobileMenu'
 import CartPage from './features/cart/CartPage'
 import ShippingReturnsPage from './features/info/pages/ShippingReturnsPage'
 import FaqPage from './features/info/pages/FaqPage'
-
 import { CatalogPage } from './features/catalog/pages/CatalogPage'
 import type { Category } from './features/catalog/pages/CatalogPage'
 import { ProductPage } from './features/catalog/pages/ProductPage'
 import { products } from './features/catalog/data/products'
+import { CampaignsPage } from './features/info/pages/CampaignsPage'
 
 const menuCategories: Partial<Record<string, Category>> = {
   'ALL PRODUCTS': 'all',
@@ -31,10 +31,7 @@ const menuCategories: Partial<Record<string, Category>> = {
 
 function ProductRoute({ onBack }: { onBack: () => void }) {
   const { productId } = useParams<{ productId: string }>()
-
-  const product = products.find(
-    (item) => item.id === productId
-  )
+  const product = products.find((item) => item.id === productId)
 
   if (!product) {
     return <Navigate to="/" replace />
@@ -59,17 +56,23 @@ function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [menuNotice, setMenuNotice] = useState<string | null>(null)
 
+// Dark theme for product and information pages
   const isDark =
     location.pathname === '/cart' ||
+    location.pathname === '/campaigns' ||
     location.pathname.startsWith('/product/') ||
     location.pathname === '/faq' ||
     location.pathname === '/shipping-returns'
 
-  function openCatalog() {
+  function goTo(path: string) {
     setIsMenuOpen(false)
     setMenuNotice(null)
-    navigate('/')
+    navigate(path)
     window.scrollTo(0, 0)
+  }
+
+  function openCatalog() {
+    goTo('/')
   }
 
   function openProduct(productId: string) {
@@ -77,18 +80,11 @@ function App() {
       return
     }
 
-    setIsMenuOpen(false)
-    setMenuNotice(null)
-
-    navigate('/product/' + encodeURIComponent(productId))
-    window.scrollTo(0, 0)
+    goTo('/product/' + encodeURIComponent(productId))
   }
 
   function openCart() {
-    setIsMenuOpen(false)
-    setMenuNotice(null)
-    navigate('/cart')
-    window.scrollTo(0, 0)
+    goTo('/cart')
   }
 
   function handleMenuNavigate(section: string) {
@@ -110,6 +106,11 @@ function App() {
     if (category) {
       setCatalogCategory(category)
       openCatalog()
+      return
+    }
+
+    if (section === 'CAMPAIGNS') {
+      goTo('/campaigns')
       return
     }
 
@@ -175,6 +176,11 @@ function App() {
         <Route
           path="/shipping-returns"
           element={<ShippingReturnsPage />}
+        />
+
+        <Route
+          path="/campaigns"
+          element={<CampaignsPage />}
         />
 
         <Route

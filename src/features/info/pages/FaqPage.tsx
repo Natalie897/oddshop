@@ -1,3 +1,5 @@
+import AnimatedAccordion from '../../../components/ui/AnimatedAccordion'
+
 const questions = [
   {
     question: 'HOW DO I CHOOSE MY SIZE?',
@@ -43,27 +45,17 @@ export default function FaqPage() {
           FREQUENTLY ASKED QUESTIONS
         </p>
 
-        <div className="mt-14 border-t border-black">
-          {questions.map((item) => (
-            <details
-              key={item.question}
-              className="group border-b border-neutral-300"
-            >
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-5 py-6 font-['Barlow_Condensed'] text-lg font-bold uppercase">
-                {item.question}
-                <span className="text-2xl group-open:hidden">
-                  +
-                </span>
-                <span className="hidden text-2xl group-open:inline">
-                  −
-                </span>
-              </summary>
-
-              <p className="max-w-2xl pb-6 text-sm leading-7 text-neutral-700">
-                {item.answer}
-              </p>
-            </details>
-          ))}
+        <div className="mt-14 border-t border-neutral-600">
+            {questions.map((item) => (
+                <AnimatedAccordion
+                key={item.question}
+                title={item.question}
+                >
+                <p className="max-w-2xl">
+                    {item.answer}
+                </p>
+                </AnimatedAccordion>
+            ))}
         </div>
       </div>
     </main>

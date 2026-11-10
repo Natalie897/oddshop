@@ -4,6 +4,7 @@ import type { Product } from '../../../types/product'
 import { useCartStore } from '../../cart/store/useCartStore'
 
 import { Link } from 'react-router-dom'
+import AnimatedAccordion from '../../../components/ui/AnimatedAccordion'
 
 interface ProductPageProps {
   product: Product
@@ -190,48 +191,36 @@ export function ProductPage({ product, onBack }: ProductPageProps) {
                 : 'NEXT STEP / ORDER IN TELEGRAM BOT'}
             </p>
 
-            <div className="mt-8 border-t border-neutral-500">
-              <button
-                type="button"
-                onClick={() => toggleSection('shipping')}
-                aria-expanded={openSection === 'shipping'}
-                className="flex w-full cursor-pointer items-center justify-between border-b border-neutral-500 py-4 text-left text-[14px] font-bold uppercase"
+            <div className="mt-8 border-t border-neutral-600">
+              <AnimatedAccordion
+                variant="product"
+                title="SHIPPING + RETURNS"
+                open={openSection === 'shipping'}
+                onToggle={() => toggleSection('shipping')}
               >
-                SHIPPING + RETURNS
-                <span>{openSection === 'shipping' ? '−' : '+'}</span>
-              </button>
+                <p>
+                  Delivery options, shipping costs and return
+                  conditions will be confirmed before checkout opens.
+                </p>
 
-              {openSection === 'shipping' && (
-                <div className="py-4 text-[13px] leading-6 text-neutral-300">
-                  <p>
-                    Delivery options, shipping costs and return
-                    conditions will be confirmed before checkout opens.
-                  </p>
+                <Link
+                  to="/shipping-returns"
+                  className="mt-4 inline-block font-bold uppercase text-white underline underline-offset-4 transition-colors hover:text-neutral-400"
+                >
+                  VIEW SHIPPING & RETURNS →
+                </Link>
+              </AnimatedAccordion>
 
-                  <Link
-                    to="/shipping-returns"
-                    className="mt-4 inline-block font-bold uppercase text-white underline underline-offset-4 transition-colors hover:text-neutral-400"
-                  >
-                    VIEW SHIPPING & RETURNS →
-                  </Link>
-                </div>
-              )}
-
-              <button
-                type="button"
-                onClick={() => toggleSection('size')}
-                aria-expanded={openSection === 'size'}
-                className="flex w-full cursor-pointer items-center justify-between border-b border-neutral-500 py-4 text-left text-[14px] font-bold uppercase"
+              <AnimatedAccordion
+                variant="product"
+                title="SIZE GUIDE"
+                open={openSection === 'size'}
+                onToggle={() => toggleSection('size')}
               >
-                SIZE GUIDE
-                <span>{openSection === 'size' ? '−' : '+'}</span>
-              </button>
-
-              {openSection === 'size' && (
-                <p className="py-4 text-[13px] text-neutral-300">
+                <p>
                   Size measurements will be added before launch.
                 </p>
-              )}
+              </AnimatedAccordion>
             </div>
           </section>
         </div>

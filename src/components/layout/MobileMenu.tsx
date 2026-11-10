@@ -1,3 +1,4 @@
+
 import { useEffect, useRef, useState } from 'react'
 import { Search, X, ArrowUpRight } from 'lucide-react'
 import type { Product } from '../../types/product'
@@ -11,7 +12,6 @@ const shopSections = [
 
 const infoSections = [
   'CAMPAIGNS',
-  'OUR STORY',
   'FAQ',
   'SHIPPING & RETURNS',
 ]
@@ -128,7 +128,10 @@ export default function MobileMenu({
           <div className="flex items-center gap-3 border-b border-black pb-3">
             <Search size={21} strokeWidth={1.6} />
 
-            <label htmlFor="odd-product-search" className="sr-only">
+            <label
+              htmlFor="odd-product-search"
+              className="sr-only"
+            >
               Search ODD products
             </label>
 
