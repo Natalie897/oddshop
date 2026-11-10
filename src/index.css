@@ -19,3 +19,19 @@ body {
 #root {
   min-height: 100vh;
 }
+
+
+/* ODD mobile typography */
+@media (max-width: 767px) {
+  .font-black:not(header a *) {
+    font-weight: 700;
+  }
+
+  .font-bold:not(header a *) {
+    font-weight: 600;
+  }
+
+  .font-semibold {
+    font-weight: 500;
+  }
+}

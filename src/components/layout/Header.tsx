@@ -24,55 +24,70 @@ export default function Header({
   )
 
   const isDark = theme === 'dark'
-
-  // Hide cart counter on Campaigns page only
   const showCart = location.pathname !== '/campaigns'
 
   return (
     <header
-      className={`relative h-28 w-full ${
-        isDark
+      className={
+        'relative z-10 h-[128px] w-full sm:h-[132px] lg:h-28 ' +
+        (isDark
           ? 'bg-black text-white'
-          : 'bg-white text-black'
-      }`}
+          : 'bg-white text-black')
+      }
     >
-      {/* ODD logo */}
-      <div className="absolute left-1/2 top-3 flex -translate-x-1/2 flex-col items-center">
+      {/* LOGO */}
+      <div className="absolute left-1/2 top-4 flex -translate-x-1/2 flex-col items-center lg:top-3">
         <Link
           to="/"
           aria-label="ODD Clothes - Home"
           className="flex flex-col items-center text-inherit no-underline"
         >
-          <span className="text-4xl font-black lowercase leading-none tracking-tighter">
+          <span className="text-[42px] font-black lowercase leading-[0.9] tracking-[-3px] lg:text-4xl">
             odd.
           </span>
 
-          <span className="text-sm font-bold tracking-tight">
+          <span className="mt-0.5 text-[12px] font-bold tracking-tight lg:text-sm">
             Clothes
           </span>
         </Link>
 
-        {/* Cart counter */}
+        {/* CART */}
         {showCart && (
           <button
             type="button"
             onClick={onCartClick}
             aria-label={`Open cart with ${itemCount} items`}
-            className="mt-2 whitespace-nowrap text-xs font-bold uppercase tracking-wider hover:opacity-60"
+            className="mt-3 flex min-h-10 items-center gap-2 font-['Barlow_Condensed'] text-[12px] font-bold uppercase transition-opacity hover:opacity-60 lg:mt-2 lg:min-h-0"
           >
-            CART ( {itemCount} )
+            <span>CART</span>
+
+            <span
+              className={
+                'flex h-[25px] min-w-[25px] items-center justify-center rounded-full border px-1 text-[11px] ' +
+                (isDark
+                  ? 'border-white bg-white text-black'
+                  : 'border-black bg-black text-white')
+              }
+            >
+              {itemCount}
+            </span>
           </button>
         )}
       </div>
 
-      {/* Mobile menu button */}
+      {/* MENU */}
       <button
         type="button"
         onClick={onMenuClick}
         aria-label="Open menu"
-        className="absolute right-5 top-5 p-2 transition-opacity hover:opacity-60 sm:right-8"
+        aria-haspopup="dialog"
+        className="absolute right-4 top-3 flex h-11 w-11 cursor-pointer items-center justify-center transition-opacity hover:opacity-60 sm:right-7"
       >
-        <Menu size={27} strokeWidth={1.7} />
+        <Menu
+          size={27}
+          strokeWidth={1.6}
+          className="scale-y-[0.72]"
+        />
       </button>
     </header>
   )
