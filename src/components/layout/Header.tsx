@@ -42,13 +42,15 @@ export default function Header({
           aria-label="ODD Clothes - Home"
           className="flex flex-col items-center text-inherit no-underline"
         >
-          <span className="text-[42px] font-black lowercase leading-[0.9] tracking-[-3px] lg:text-4xl">
-            odd.
-          </span>
-
-          <span className="mt-0.5 text-[12px] font-bold tracking-tight lg:text-sm">
-            Clothes
-          </span>
+          <img
+            src={
+              isDark
+                ? '/images/odd-logo-white.png'
+                : '/images/odd-logo-black.png'
+            }
+            alt="ODD Clothes"
+            className="block h-auto w-[105px] object-contain sm:w-[120px] lg:w-[130px]"
+          />
         </Link>
 
         {/* CART */}

@@ -14,6 +14,8 @@ import Footer from './components/layout/Footer'
 import MobileMenu from './components/layout/MobileMenu'
 
 import CartPage from './features/cart/CartPage'
+import ShippingReturnsPage from './features/info/pages/ShippingReturnsPage'
+import FaqPage from './features/info/pages/FaqPage'
 import { CatalogPage } from './features/catalog/pages/CatalogPage'
 import type { Category } from './features/catalog/pages/CatalogPage'
 import { ProductPage } from './features/catalog/pages/ProductPage'
@@ -54,11 +56,13 @@ function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [menuNotice, setMenuNotice] = useState<string | null>(null)
 
-  // Dark theme for cart, product pages and campaigns
+// Dark theme for product and information pages
   const isDark =
     location.pathname === '/cart' ||
     location.pathname === '/campaigns' ||
-    location.pathname.startsWith('/product/')
+    location.pathname.startsWith('/product/') ||
+    location.pathname === '/faq' ||
+    location.pathname === '/shipping-returns'
 
   function goTo(path: string) {
     setIsMenuOpen(false)
@@ -84,6 +88,19 @@ function App() {
   }
 
   function handleMenuNavigate(section: string) {
+    if (section === 'FAQ' || section === 'SHIPPING & RETURNS') {
+      setIsMenuOpen(false)
+      setMenuNotice(null)
+
+      navigate(
+        section === 'FAQ'
+          ? '/faq'
+          : '/shipping-returns'
+      )
+
+      window.scrollTo(0, 0)
+      return
+    }
     const category = menuCategories[section]
 
     if (category) {
@@ -150,6 +167,15 @@ function App() {
         <Route
           path="/cart"
           element={<CartPage />}
+        />
+        <Route
+          path="/faq"
+          element={<FaqPage />}
+        />
+
+        <Route
+          path="/shipping-returns"
+          element={<ShippingReturnsPage />}
         />
 
         <Route

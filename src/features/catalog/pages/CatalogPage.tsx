@@ -4,6 +4,13 @@ import { products } from '../data/products'
 
 export type Category = 'all' | 'caps' | 't-shirts' | 'bags'
 
+type SortOption =
+  | 'default'
+  | 'price-asc'
+  | 'price-desc'
+  | 'name-asc'
+
+
 interface CatalogPageProps {
   onProductClick?: (productId: string) => void
   selectedCategory?: Category
@@ -23,6 +30,7 @@ export function CatalogPage({
   onCategoryChange,
 }: CatalogPageProps) {
   const [localCategory, setLocalCategory] = useState<Category>('all')
+  const [sortBy, setSortBy] = useState<SortOption>('default')
 
   const activeCategory = selectedCategory ?? localCategory
 
@@ -38,6 +46,24 @@ export function CatalogPage({
     (product) =>
       activeCategory === 'all' || product.category === activeCategory,
   )
+  const sortedProducts = [...filteredProducts].sort((a, b) => {
+    if (sortBy === 'price-asc' || sortBy === 'price-desc') {
+      // Товары без цены всегда располагаются в конце
+      if (a.price === null && b.price === null) return 0
+      if (a.price === null) return 1
+      if (b.price === null) return -1
+
+      return sortBy === 'price-asc'
+        ? a.price - b.price
+        : b.price - a.price
+    }
+
+    if (sortBy === 'name-asc') {
+      return a.name.localeCompare(b.name)
+    }
+
+    return 0
+  })
 
   return (
     <main className="min-h-screen bg-white text-black">
@@ -66,9 +92,28 @@ export function CatalogPage({
             ))}
           </nav>
 
-          <span className="font-['Barlow_Condensed'] text-[11px] uppercase tracking-wide text-neutral-500">
-            SORT: NEWEST ↓
-          </span>
+          <div className="flex items-center gap-2 font-['Barlow_Condensed']">
+            <label
+              htmlFor="catalog-sort"
+              className="text-[11px] font-bold uppercase tracking-wide text-neutral-500"
+            >
+              SORT:
+            </label>
+
+            <select
+              id="catalog-sort"
+              value={sortBy}
+              onChange={(event) =>
+                setSortBy(event.target.value as SortOption)
+              }
+              className="cursor-pointer border-b border-black bg-white px-1 py-1 text-[12px] font-bold uppercase text-black outline-offset-2"
+            >
+              <option value="default">DEFAULT</option>
+              <option value="price-asc">PRICE: LOW TO HIGH</option>
+              <option value="price-desc">PRICE: HIGH TO LOW</option>
+              <option value="name-asc">NAME: A-Z</option>
+            </select>
+          </div>
         </div>
 
         {/* Сетка товаров */}
@@ -78,7 +123,7 @@ export function CatalogPage({
           </p>
         ) : (
           <div className="grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-3 md:gap-y-12">
-            {filteredProducts.map((product) => (
+            {sortedProducts.map((product) => (
               <ProductCard
                 key={product.id}
                 product={product}

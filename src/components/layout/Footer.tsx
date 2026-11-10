@@ -27,6 +27,10 @@ export default function Footer({
     'text-[13px] font-semibold uppercase tracking-wide ' +
     'transition-opacity duration-200 hover:opacity-50'
 
+  function scrollToTop() {
+    window.scrollTo(0, 0)
+  }
+
   return (
     <footer
       className={
@@ -62,7 +66,7 @@ export default function Footer({
           </p>
         </div>
 
-        {/* ALL LINKS IN ONE ROW */}
+        {/* NAVIGATION AND SOCIALS */}
         <nav
           aria-label="Footer navigation"
           className={
@@ -75,7 +79,7 @@ export default function Footer({
           <Link
             to="/"
             className={linkClass}
-            onClick={() => window.scrollTo(0, 0)}
+            onClick={scrollToTop}
           >
             ALL PRODUCTS
           </Link>
@@ -83,14 +87,26 @@ export default function Footer({
           <Link
             to="/campaigns"
             className={linkClass}
-            onClick={() => window.scrollTo(0, 0)}
+            onClick={scrollToTop}
           >
             CAMPAIGNS
           </Link>
 
-          <span className="font-['Barlow_Condensed'] text-[13px] font-semibold uppercase tracking-wide">
+          <Link
+            to="/faq"
+            className={linkClass}
+            onClick={scrollToTop}
+          >
             FAQ
-          </span>
+          </Link>
+
+          <Link
+            to="/shipping-returns"
+            className={linkClass}
+            onClick={scrollToTop}
+          >
+            SHIPPING & RETURNS
+          </Link>
 
           {socialLinks.map((social) => (
             <a

@@ -31,7 +31,6 @@ export default function CartPage() {
   return (
     <main className="min-h-screen w-full overflow-x-clip bg-black font-['Barlow_Condensed'] text-white">
       <div className="mx-auto max-w-6xl px-4 pb-16 pt-5 sm:px-8 sm:pt-10 lg:py-16">
-
         {/* PAGE TITLE */}
         <header className="border-b border-neutral-700 pb-5 sm:pb-7">
           <h1 className="m-0 text-[43px] font-black uppercase leading-none tracking-tight sm:text-7xl">
@@ -63,38 +62,52 @@ export default function CartPage() {
           </section>
         ) : (
           <div className="mt-3 grid gap-10 lg:grid-cols-[minmax(0,1fr)_360px] lg:gap-12">
-
             {/* PRODUCTS */}
-            <section aria-label="Cart items" className="min-w-0">
+            <section
+              aria-label="Cart items"
+              className="min-w-0"
+            >
               <ul className="divide-y divide-neutral-700">
                 {items.map((item) => {
                   const { product, size, quantity } = item
+
+                  const productUrl =
+                    `/product/${encodeURIComponent(product.id)}`
 
                   return (
                     <li
                       key={`${product.id}:${size ?? ''}`}
                       className="flex min-w-0 gap-3 py-5 sm:gap-6 sm:py-7"
                     >
-                      {/* PRODUCT IMAGE */}
-                      <div className="h-[105px] w-[105px] shrink-0 overflow-hidden bg-neutral-200 sm:h-32 sm:w-32">
+                      {/* CLICKABLE PRODUCT IMAGE */}
+                      <Link
+                        to={productUrl}
+                        aria-label={`View ${product.name}`}
+                        className="block h-[105px] w-[105px] shrink-0 overflow-hidden bg-neutral-200 sm:h-32 sm:w-32"
+                      >
                         {product.images[0] ? (
                           <img
                             src={product.images[0]}
                             alt={product.name}
                             loading="lazy"
-                            className="h-full w-full object-contain"
+                            className="h-full w-full object-contain transition-transform duration-300 hover:scale-105"
                           />
                         ) : (
                           <div className="flex h-full w-full items-center justify-center text-xs text-neutral-500">
                             NO IMAGE
                           </div>
                         )}
-                      </div>
+                      </Link>
 
                       {/* PRODUCT INFO */}
                       <div className="flex min-w-0 flex-1 flex-col">
                         <h2 className="m-0 break-words text-[17px] font-black uppercase leading-tight sm:text-xl">
-                          {product.name}
+                          <Link
+                            to={productUrl}
+                            className="transition-colors hover:text-neutral-400 focus-visible:outline-2 focus-visible:outline-white"
+                          >
+                            {product.name}
+                          </Link>
                         </h2>
 
                         <p className="mt-2 text-[12px] font-semibold uppercase text-neutral-400">
@@ -120,7 +133,10 @@ export default function CartPage() {
                                       quantity - 1,
                                       size
                                     )
-                                  : removeItem(product.id, size)
+                                  : removeItem(
+                                      product.id,
+                                      size
+                                    )
                               }
                               className="flex h-10 w-9 items-center justify-center transition-colors hover:bg-neutral-800 focus-visible:outline-2 focus-visible:outline-white sm:h-11 sm:w-11"
                             >

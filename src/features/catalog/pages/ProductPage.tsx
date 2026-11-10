@@ -1,8 +1,9 @@
 ﻿
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import type { Product } from '../../../types/product'
 import { useCartStore } from '../../cart/store/useCartStore'
+import AnimatedAccordion from '../../../components/ui/AnimatedAccordion'
 
 interface ProductPageProps {
   product: Product
@@ -19,7 +20,12 @@ export function ProductPage({ product, onBack }: ProductPageProps) {
   const addItem = useCartStore((state) => state.addItem)
 
   const sizes = product.sizes ?? []
-  const requiresSize = sizes.length > 0
+  const requiresSize = sizes.length > 1
+
+  const sizeForCart =
+    sizes.length === 1
+      ? sizes[0]
+      : selectedSize ?? undefined
 
   const isTshirt = product.category === 't-shirts'
   const isCap = product.category === 'caps'
@@ -49,16 +55,24 @@ export function ProductPage({ product, onBack }: ProductPageProps) {
   function handleAddToBag() {
     if (!canAddToBag) return
 
-    addItem(product, selectedSize ?? undefined)
+    addItem(product, sizeForCart)
     setAddedToBag(true)
   }
 
   function handleBuyNow() {
     if (!canAddToBag) return
 
-    addItem(product, selectedSize ?? undefined)
+    addItem(product, sizeForCart)
     navigate('/cart')
     window.scrollTo(0, 0)
+  }
+
+  function handleBack() {
+    if (onBack) {
+      onBack()
+    } else {
+      navigate('/')
+    }
   }
 
   const imageSection = (
@@ -86,16 +100,26 @@ export function ProductPage({ product, onBack }: ProductPageProps) {
 
   const purchaseSection = (
     <section className="font-['Barlow_Condensed'] lg:self-center">
+      {/* PRODUCT NAME ON MOBILE */}
       <div className="mb-6 lg:hidden">
         <h1 className="text-[24px] font-bold uppercase leading-tight">
           {product.name}
         </h1>
       </div>
 
+      {/* PRICE */}
       <p className="text-[18px] font-bold uppercase lg:text-right lg:text-[14px]">
         {formattedPrice}
       </p>
 
+      {/* SINGLE SIZE */}
+      {sizes.length === 1 && (
+        <p className="mt-5 text-[14px] font-bold uppercase">
+          SIZE: {sizes[0]}
+        </p>
+      )}
+
+      {/* SIZE SELECTION */}
       {requiresSize && (
         <div className="mt-7">
           <p className="mb-3 text-[14px] font-bold uppercase">
@@ -123,6 +147,7 @@ export function ProductPage({ product, onBack }: ProductPageProps) {
         </div>
       )}
 
+      {/* PURCHASE BUTTONS */}
       <div className="mt-7 flex flex-col gap-3">
         <button
           type="button"
@@ -153,6 +178,7 @@ export function ProductPage({ product, onBack }: ProductPageProps) {
 
   const descriptionSection = (
     <section className="font-['Barlow_Condensed']">
+      {/* PRODUCT NAME ON DESKTOP */}
       <h1 className="hidden text-[22px] font-bold uppercase leading-tight lg:block">
         {product.name}
       </h1>
@@ -172,6 +198,7 @@ export function ProductPage({ product, onBack }: ProductPageProps) {
         </p>
       </div>
 
+      {/* DETAILS / CARE */}
       <div className="mt-9 lg:mt-12">
         <h2 className="mb-3 text-[15px] font-bold uppercase">
           DETAILS / CARE
@@ -205,41 +232,36 @@ export function ProductPage({ product, onBack }: ProductPageProps) {
   const informationSection = (
     <section className="font-['Barlow_Condensed']">
       <div className="border-t border-neutral-600">
-        <button
-          type="button"
-          onClick={() => toggleSection('shipping')}
-          aria-expanded={openSection === 'shipping'}
-          className="flex min-h-[56px] w-full cursor-pointer items-center justify-between border-b border-neutral-600 py-4 text-left text-[14px] font-bold uppercase"
+        <AnimatedAccordion
+          variant="product"
+          title="SHIPPING + RETURNS"
+          open={openSection === 'shipping'}
+          onToggle={() => toggleSection('shipping')}
         >
-          SHIPPING + RETURNS
-          <span aria-hidden="true">
-            {openSection === 'shipping' ? '−' : '+'}
-          </span>
-        </button>
-
-        {openSection === 'shipping' && (
-          <p className="py-5 text-[13px] leading-relaxed text-neutral-300">
-            Shipping and returns information will be added before launch.
+          <p>
+            Delivery options, shipping costs and return
+            conditions will be confirmed before checkout opens.
           </p>
-        )}
 
-        <button
-          type="button"
-          onClick={() => toggleSection('size')}
-          aria-expanded={openSection === 'size'}
-          className="flex min-h-[56px] w-full cursor-pointer items-center justify-between border-b border-neutral-600 py-4 text-left text-[14px] font-bold uppercase"
+          <Link
+            to="/shipping-returns"
+            className="mt-4 inline-block font-bold uppercase text-white underline underline-offset-4 transition-colors hover:text-neutral-400"
+            onClick={() => window.scrollTo(0, 0)}
+          >
+            VIEW SHIPPING & RETURNS →
+          </Link>
+        </AnimatedAccordion>
+
+        <AnimatedAccordion
+          variant="product"
+          title="SIZE GUIDE"
+          open={openSection === 'size'}
+          onToggle={() => toggleSection('size')}
         >
-          SIZE GUIDE
-          <span aria-hidden="true">
-            {openSection === 'size' ? '−' : '+'}
-          </span>
-        </button>
-
-        {openSection === 'size' && (
-          <p className="py-5 text-[13px] leading-relaxed text-neutral-300">
+          <p>
             Size measurements will be added before launch.
           </p>
-        )}
+        </AnimatedAccordion>
       </div>
     </section>
   )
@@ -247,9 +269,10 @@ export function ProductPage({ product, onBack }: ProductPageProps) {
   return (
     <main className="min-h-[calc(100vh-112px)] overflow-x-clip bg-black text-white">
       <div className="mx-auto max-w-[1440px] px-5 pb-16 pt-5 md:px-9 lg:pb-14 lg:pt-7">
+        {/* BACK BUTTON */}
         <button
           type="button"
-          onClick={onBack}
+          onClick={handleBack}
           className="cursor-pointer font-['Barlow_Condensed'] text-xs uppercase text-neutral-400 transition-colors hover:text-white"
         >
           ← BACK TO SHOP
