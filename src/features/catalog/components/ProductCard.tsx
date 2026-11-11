@@ -38,7 +38,7 @@ export function ProductCard({
           <p className="mt-3 font-['Barlow_Condensed'] text-[12px] font-semibold uppercase leading-tight md:mt-1 md:text-[13px]">
             {product.price === null
               ? 'PRICE TBC'
-              : product.price.toLocaleString('ru-RU') + ' в‚Ѕ'}
+              : product.price.toLocaleString('ru-RU') + ' ₽'}
           </p>
 
           {product.sku && (
@@ -51,3 +51,5 @@ export function ProductCard({
     </article>
   )
 }
+
+

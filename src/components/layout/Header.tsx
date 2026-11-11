@@ -1,4 +1,4 @@
-import { assetUrl } from '../../utils/assetUrl'
+﻿import { assetUrl } from '../../utils/assetUrl'
 
 import { Menu } from 'lucide-react'
 import { Link, useLocation } from 'react-router-dom'
@@ -46,8 +46,8 @@ export default function Header({
           <img
             src={
               isDark
-                ? assetUrl("/images/odd-logo-white.png")
-                : assetUrl("/images/odd-logo-black.png")
+                ? assetUrl('/images/odd-logo-white.png')
+                : assetUrl('/images/odd-logo-black.png')
             }
             alt="ODD Clothes"
             className="block h-auto w-[105px] object-contain sm:w-[120px] lg:w-[130px]"
@@ -95,3 +95,4 @@ export default function Header({
     </header>
   )
 }
+
