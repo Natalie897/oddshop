@@ -1,5 +1,5 @@
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   Navigate,
   Route,
@@ -56,13 +56,31 @@ function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [menuNotice, setMenuNotice] = useState<string | null>(null)
 
-// Dark theme for product and information pages
+  // Dark theme for product and information pages
   const isDark =
     location.pathname === '/cart' ||
     location.pathname === '/campaigns' ||
     location.pathname.startsWith('/product/') ||
     location.pathname === '/faq' ||
     location.pathname === '/shipping-returns'
+
+  // Match the iPhone safe-area background to the page theme
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark-page', isDark)
+
+    const themeColor = document.querySelector(
+      'meta[name="theme-color"]'
+    )
+
+    themeColor?.setAttribute(
+      'content',
+      isDark ? '#000000' : '#ffffff'
+    )
+
+    return () => {
+      document.documentElement.classList.remove('dark-page')
+    }
+  }, [isDark])
 
   function goTo(path: string) {
     setIsMenuOpen(false)
@@ -101,6 +119,7 @@ function App() {
       window.scrollTo(0, 0)
       return
     }
+
     const category = menuCategories[section]
 
     if (category) {
@@ -168,6 +187,7 @@ function App() {
           path="/cart"
           element={<CartPage />}
         />
+
         <Route
           path="/faq"
           element={<FaqPage />}

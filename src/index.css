@@ -1,37 +1,31 @@
-@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800;900&display=swap');
-@import "tailwindcss";
 
-:root {
-  font-family: Arial, Helvetica, sans-serif;
-  color: #111111;
+/* iPhone safe area and page backgrounds */
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+html {
   background-color: #ffffff;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
+}
+
+html.dark-page,
+html.dark-page body {
+  background-color: #000000;
+}
+
+html.dark-page {
+  color-scheme: dark;
 }
 
 body {
-  margin: 0;
-  min-width: 320px;
   min-height: 100vh;
+  min-height: 100dvh;
 }
 
 #root {
   min-height: 100vh;
-}
-
-
-/* ODD mobile typography */
-@media (max-width: 767px) {
-  .font-black:not(header a *) {
-    font-weight: 700;
-  }
-
-  .font-bold:not(header a *) {
-    font-weight: 600;
-  }
-
-  .font-semibold {
-    font-weight: 500;
-  }
+  min-height: 100dvh;
 }
