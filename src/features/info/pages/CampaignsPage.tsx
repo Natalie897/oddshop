@@ -1,3 +1,4 @@
+import { assetUrl } from '../../../utils/assetUrl'
 
 import { useEffect, useRef, useState } from 'react'
 
@@ -10,37 +11,37 @@ type Campaign = {
 const campaigns: Campaign[] = [
   {
     id: 1,
-    image: '/images/campaign-01.jpg',
+    image: assetUrl("/images/campaign-01.jpg"),
     title: 'ODD / 001',
   },
   {
     id: 2,
-    image: '/images/campaign-02.jpg',
+    image: assetUrl("/images/campaign-02.jpg"),
     title: 'ODD / 002',
   },
   {
     id: 3,
-    image: '/images/campaign-03.jpg',
+    image: assetUrl("/images/campaign-03.jpg"),
     title: 'ODD / 003',
   },
   {
     id: 4,
-    image: '/images/campaign-04.jpg',
+    image: assetUrl("/images/campaign-04.jpg"),
     title: 'ODD / 004',
   },
   {
     id: 5,
-    image: '/images/campaign-05.jpg',
+    image: assetUrl("/images/campaign-05.jpg"),
     title: 'ODD / 005',
   },
   {
     id: 6,
-    image: '/images/campaign-06.jpg',
+    image: assetUrl("/images/campaign-06.jpg"),
     title: 'ODD / 006',
   },
   {
     id: 7,
-    image: '/images/campaign-07.jpg',
+    image: assetUrl("/images/campaign-07.jpg"),
     title: 'ODD / 007',
   },
 ]

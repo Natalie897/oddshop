@@ -1,4 +1,5 @@
-﻿
+import { assetUrl } from '../../../utils/assetUrl'
+
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import type { Product } from '../../../types/product'
@@ -30,7 +31,7 @@ export function ProductPage({ product, onBack }: ProductPageProps) {
   const isTshirt = product.category === 't-shirts'
   const isCap = product.category === 'caps'
 
-  const detailImage = `/images/products/detail/${product.id}.png`
+  const detailImage = assetUrl(`/images/products/detail/${product.id}.png`)
 
   const canAddToBag =
     product.price !== null &&

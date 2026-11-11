@@ -1,3 +1,4 @@
+import { assetUrl } from '../../../utils/assetUrl'
 
 import type { Product } from '../../../types/product'
 
@@ -10,7 +11,7 @@ export function ProductCard({
   product,
   onClick,
 }: ProductCardProps) {
-  const image = `/images/products/detail/${product.id}.png`
+  const image = assetUrl(`/images/products/detail/${product.id}.png`)
 
   return (
     <article className="min-w-0 w-full text-center">
@@ -37,7 +38,7 @@ export function ProductCard({
           <p className="mt-3 font-['Barlow_Condensed'] text-[12px] font-semibold uppercase leading-tight md:mt-1 md:text-[13px]">
             {product.price === null
               ? 'PRICE TBC'
-              : product.price.toLocaleString('ru-RU') + ' ₽'}
+              : product.price.toLocaleString('ru-RU') + ' в‚Ѕ'}
           </p>
 
           {product.sku && (
