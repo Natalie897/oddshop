@@ -1,4 +1,5 @@
 
+import { useState } from 'react'
 import type { Product } from '../../../types/product'
 
 interface ProductCardProps {
@@ -10,13 +11,22 @@ export function ProductCard({
   product,
   onClick,
 }: ProductCardProps) {
-  const image = `/images/products/detail/${product.id}.png`
+  const [isHovered, setIsHovered] = useState(false)
+
+const primaryImage =
+  product.images[0] ?? `/images/products/detail/${product.id}.png`
+
+const hoverImage = product.images[2] ?? primaryImage
+
+const image = isHovered ? hoverImage : primaryImage
 
   return (
     <article className="w-full text-center">
       <button
         type="button"
         onClick={onClick}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
         className="block w-full cursor-pointer text-center"
       >
         <div className="flex aspect-[450/458] w-full items-center justify-center overflow-hidden bg-white">

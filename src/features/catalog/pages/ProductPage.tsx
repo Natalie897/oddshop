@@ -30,7 +30,10 @@ export function ProductPage({ product, onBack }: ProductPageProps) {
   const isTshirt = product.category === 't-shirts'
   const isCap = product.category === 'caps'
 
-  const detailImage = `/images/products/detail/${product.id}.png`
+  const galleryImages =
+  product.images.length > 0
+    ? product.images
+    : [`/images/products/detail/${product.id}.png`]
 
   const canAddToBag =
     product.price !== null &&
@@ -116,24 +119,35 @@ export function ProductPage({ product, onBack }: ProductPageProps) {
             </div>
           </section>
 
-          {/* Центральная фотография */}
-          <section className="relative flex min-h-[290px] items-center justify-center overflow-hidden sm:min-h-[360px] lg:min-h-[430px]">
-            <img
-              key={product.id}
-              src={detailImage}
-              alt={product.name}
-              className="relative h-auto w-[90%] max-w-[470px] object-contain"
-              style={{
-                filter: [
-                  'drop-shadow(1px 0 0 rgba(160,160,160,0.65))',
-                  'drop-shadow(-1px 0 0 rgba(160,160,160,0.65))',
-                  'drop-shadow(0 1px 0 rgba(160,160,160,0.65))',
-                  'drop-shadow(0 -1px 0 rgba(160,160,160,0.65))',
-                  'drop-shadow(0 0 5px rgba(150,150,150,0.22))',
-                ].join(' '),
-              }}
-            />
+
+          {/* Центральная галерея */}
+          <section
+            key={product.id}
+            aria-label={`${product.name} gallery`}
+            tabIndex={0}
+            className="relative h-[60vh] min-h-[290px] max-h-[560px] snap-y snap-mandatory overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:min-h-[360px] lg:min-h-[430px]"
+          >
+            {galleryImages.map((image, index) => (
+              <div
+                key={image}
+                className="flex h-full w-full snap-start snap-always items-center justify-center"
+              >
+                <img
+                  src={image}
+                  alt={`${product.name} — photo ${index + 1}`}
+                  loading={index === 0 ? 'eager' : 'lazy'}
+                  className="h-auto max-h-[90%] w-[90%] max-w-[470px] object-contain"
+                  style={{
+                    filter: `
+                      drop-shadow(0 0 20px rgba(255, 255, 255, 0.22))
+                      drop-shadow(0 0 45px rgba(255, 255, 255, 0.10))
+                    `,
+                  }}
+                />
+              </div>
+            ))}
           </section>
+
 
           {/* Правая колонка — покупка */}
           <section className="font-['Barlow_Condensed'] lg:self-center">
